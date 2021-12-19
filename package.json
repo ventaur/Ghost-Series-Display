@@ -1,0 +1,15 @@
+{
+  "name": "ghost-series-display",
+  "version": "0.1.0",
+  "description": "Displays posts in a series for the Ghost publishing platform.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ghost",
+    "series"
+  ],
+  "author": "Ventaur",
+  "license": "ISC"
+}
