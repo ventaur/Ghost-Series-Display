@@ -52,12 +52,13 @@ export default [
                         modules: false,
                         targets: 'defaults',
                         useBuiltIns: 'usage',
-                        corejs: 3
+                        corejs: '3.20'
                     }]
                 ],
                 exclude: ['node_modules/**', '../../node_modules/**']
             }),
             replace({
+                preventAssignment: true,
                 'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
             })
         ]
@@ -71,7 +72,7 @@ export default [
         output: {
             file: pkg['umd:main'],
             format: 'umd',
-            name: 'ghost-series-display',
+            name: 'SeriesDisplay',
             sourcemap: true
         },
         plugins: [
@@ -87,12 +88,13 @@ export default [
                         modules: false,
                         targets: 'defaults',
                         useBuiltIns: 'usage',
-                        corejs: 3
+                        corejs: '3.20'
                     }]
                 ],
                 exclude: ['node_modules/**', '../../node_modules/**']
             }),
             replace({
+                preventAssignment: true,
                 'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
             }),
             terser()
