@@ -2,14 +2,44 @@
   "name": "ghost-series-display",
   "version": "0.1.0",
   "description": "Displays posts in a series for the Ghost publishing platform.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "repository": "https://github.com/ventaur/Ghost-Series-Display",
   "keywords": [
     "ghost",
     "series"
   ],
   "author": "Ventaur",
-  "license": "ISC"
+  "license": "ISC",
+  "main": "cjs/series-display.js",
+  "umd:main": "umd/series-display.min.js",
+  "unpkg": "umd/series-display.min.js",
+  "module": "es/series-display.js",
+  "source": "lib/index.js",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "cjs/",
+    "lib/",
+    "umd/",
+    "es/"
+  ],
+  "scripts": {
+    "dev": "echo \"Implement me!\"",
+    "pretest": "npm build",
+    "test": "NODE_ENV=testing c8 --reporter text --reporter cobertura mocha './test/**/*.test.js'",
+    "build": "rollup -c",
+    "lint": "eslint . --ext .js --cache",
+    "prepare": "NODE_ENV=production npm build",
+    "posttest": "npm lint"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@rollup/plugin-babel": "^5.3.0",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.1.1",
+    "@rollup/plugin-replace": "^3.0.0",
+    "core-js": "^3.20.0",
+    "rollup": "^2.61.1",
+    "rollup-plugin-terser": "^7.0.2"
+  }
 }
