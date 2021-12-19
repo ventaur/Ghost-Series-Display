@@ -73,7 +73,7 @@ export default [
         output: {
             file: pkg['umd:main'],
             format: 'umd',
-            name: 'SeriesDisplay',
+            name: 'GhostSeriesDisplay',
             sourcemap: true
         },
         plugins: [
