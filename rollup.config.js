@@ -47,6 +47,7 @@ export default [
                 include: ['node_modules/**', '../../node_modules/**']
             }),
             babel({
+                babelHelpers: 'bundled',
                 presets: [
                     ['@babel/preset-env', {
                         modules: false,
@@ -83,6 +84,7 @@ export default [
                 include: ['node_modules/**', '../../node_modules/**']
             }),
             babel({
+                babelHelpers: 'bundled',
                 presets: [
                     ['@babel/preset-env', {
                         modules: false,
