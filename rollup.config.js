@@ -18,6 +18,7 @@ export default [
         input: pkg.source,
         output: {
             file: pkg.main,
+            exports: 'default',
             format: 'cjs',
             interop: false
         },
