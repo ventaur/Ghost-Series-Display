@@ -9,10 +9,10 @@
   ],
   "author": "Ventaur",
   "license": "ISC",
-  "main": "cjs/series-display.js",
-  "umd:main": "umd/series-display.min.js",
-  "unpkg": "umd/series-display.min.js",
-  "module": "es/series-display.js",
+  "main": "dist/cjs/series-display.js",
+  "umd:main": "dist/umd/series-display.min.js",
+  "unpkg": "dist/umd/series-display.min.js",
+  "module": "dist/es/series-display.js",
   "source": "lib/index.js",
   "type": "module",
   "files": [
@@ -25,12 +25,15 @@
   ],
   "scripts": {
     "dev": "echo \"Implement me!\"",
+
     "pretest": "npm build",
     "test": "mocha './test/**/*.test.js'",
+    "posttest": "npm lint",
+    
     "build": "rollup -c",
     "lint": "eslint . --ext .js --cache",
-    "prepare": "NODE_ENV=production npm build",
-    "posttest": "npm lint"
+    
+    "prepare": "NODE_ENV=production npm build"
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",
