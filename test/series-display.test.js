@@ -29,8 +29,9 @@ describe('Series Display', function () {
     });
 
 
-    it('', function (done) {
+    it('stub', async function () {
         const seriesDisplay = new SeriesDisplay(api);
-        seriesDisplay.displaySeriesInfo(seriesTags);
+        await seriesDisplay.displaySeriesInfo(seriesTags);
+        return true;
     });
 });
