@@ -4,7 +4,7 @@ const chance = new Chance();
 import should from 'chai';
 import slugify from 'slugify';
 
-import SeriesDisplay from '../lib/index'; 
+import SeriesDisplay from '../lib/index.js'; 
 
 
 const PostScheme = 'https://';
