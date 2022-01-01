@@ -16,7 +16,6 @@ export default [
     // No transpilation or bundling other than conversion from ES modules to CJS.
     {
         input: pkg.source,
-        exclude: 'test/**',
         output: {
             file: pkg.main,
             format: 'cjs',
@@ -35,7 +34,6 @@ export default [
     // bundles all necessary dependencies and polyfills.
     {
         input: pkg.source,
-        exclude: 'test/**',
         output: [{
             file: pkg.module,
             format: 'es',
@@ -72,7 +70,6 @@ export default [
     // bundles all dependencies and polyfills.
     {
         input: pkg.source,
-        exclude: 'test/**',
         output: {
             file: pkg['umd:main'],
             format: 'umd',
