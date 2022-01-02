@@ -20,13 +20,13 @@ export default function createRandomPost(ensureSomeTags) {
     const updatedAgeMins = chance.natural(ageRangeInMinutes);
     const publishedAgeMins = chance.natural(ageRangeInMinutes);
 
-    const createDate = new Date(now - createdAgeMins);
-    const updateDate = new Date(now - Math.min(updatedAgeMins, createdAgeMins));
-    const publishDate = new Date(now - Math.min(publishedAgeMins, updatedAgeMins));
+    const createDate = new Date(now - createdAgeMins * 60 * 1000);
+    const updateDate = new Date(now - Math.min(updatedAgeMins, createdAgeMins) * 60 * 1000);
+    const publishDate = new Date(now - Math.min(publishedAgeMins, updatedAgeMins) * 60 * 1000);
 
     const id = chance.string({ pool: 'abcdef0123456789', length: 24 });
     const title = createRandomTitle();
-    const slug = slugify(title);
+    const slug = slugify(title, { lower: true });
 
     return {
         id: id,
