@@ -25,9 +25,8 @@
   ],
   "scripts": {
     "dev": "echo \"Implement me!\"",
-    "pretest": "npm build",
     "test": "mocha './test/**/*.test.js'",
-    "posttest": "npm lint",
+    "posttest": "npm run lint",
     "build": "rollup -c",
     "lint": "eslint . --ext .js --cache",
     "prepare": "NODE_ENV=production npm build"
