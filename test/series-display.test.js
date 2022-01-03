@@ -25,6 +25,7 @@ describe('Series Display', function () {
             const { document } = parseHTML(html);
 
             const list = document.querySelector('ol');
+            list.should.not.be.undefined;
             list.childElementCount.should.equal(fluffyPosts.length);
         });
         
