@@ -1,11 +1,14 @@
 import chai from 'chai';
 import { parseHTML } from 'linkedom';
+import sinon from 'sinon';
 
 import {
     SeriesTagDecDaily, SeriesTagFluffy, 
     createSeriesDisplayWithFluffyPosts,
     createSeriesDisplayWithDecDailyAndFluffyPosts
 } from './testScenarios.js';
+
+import SeriesDisplay from '../lib/index.js';
 
 const should = chai.should();
 
@@ -68,8 +71,16 @@ describe('SeriesDisplay', function () {
             });
         });
         
-        it('caches repeat API calls for same series tags', function () {
-            
+        it('caches repeat API calls for same series tags', async function () {
+            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            await seriesDisplay.getSeriesInfoHtml(SeriesTagFluffy);
+            await seriesDisplay.getSeriesInfoHtml(SeriesTagFluffy);
+            api.posts.browse.callCount.should.equal(1);
+
+            await seriesDisplay.getSeriesInfoHtml(SeriesTagDecDaily);
+            api.posts.browse.callCount.should.equal(2);
         });
     });
 
