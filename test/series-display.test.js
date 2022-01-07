@@ -59,7 +59,7 @@ describe('SeriesDisplay', function () {
                 listItemWithoutAnchor.textContent.should.equal(currentPost.title);
             });
 
-            it('contains an anchor for all posts if not current specified', async function () {
+            it('contains an anchor for all posts if no current id specified', async function () {
                 const html = await seriesDisplayForFluffyPosts.getSeriesInfoHtml(SeriesTagFluffy);
                 ({ document } = parseHTML(html));
 
