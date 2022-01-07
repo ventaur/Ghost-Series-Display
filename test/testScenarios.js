@@ -32,11 +32,15 @@ function createApi(posts) {
     return { posts: { browse: async () => ({ posts }) } };
 }
 
+function mapPostProperties(posts) {
+    return posts.map(post => ({ id: post.id, title: post.title, slug: post.slug, tags: post.tags }));
+}
+
 
 export function createSeriesDisplayWithFluffyPosts() {
     // 8 posts
     const fluffyPosts = TestPosts.slice(4);
-    const posts = cloneDeep(fluffyPosts);
+    const posts = mapPostProperties(cloneDeep(fluffyPosts));
     addTagToPosts(SeriesTagFluffy, posts);
     
     const api = createApi(posts);
@@ -48,7 +52,7 @@ export function createSeriesDisplayWithFluffyPosts() {
 
 export function createSeriesDisplayWithDecDailyAndFluffyPosts() {
     // 12 posts
-    const posts = cloneDeep(TestPosts);
+    const posts = mapPostProperties(cloneDeep(TestPosts));
     addTagToPosts(SeriesTagDecDaily, posts, [0, 1, 2, 3, 10]);
     addTagToPosts(SeriesTagFluffy, posts, [4, 5, 6, 7, 8, 9, 10, 11]);
     
