@@ -58,6 +58,14 @@ describe('SeriesDisplay', function () {
                 const listItemWithoutAnchor = [...listItems].find(item => item.querySelector('a') === null);
                 listItemWithoutAnchor.textContent.should.equal(currentPost.title);
             });
+
+            it('contains an anchor for all posts if not current specified', async function () {
+                const html = await seriesDisplayForFluffyPosts.getSeriesInfoHtml(SeriesTagFluffy);
+                ({ document } = parseHTML(html));
+
+                const anchors = document.querySelectorAll('ol > li > a');
+                anchors.length.should.equal(fluffyPosts.length);
+            });
         });
         
         it('caches repeat API calls for same series tags', function () {
