@@ -52,9 +52,9 @@ export default [
                 presets: [
                     ['@babel/preset-env', {
                         modules: false,
-                        targets: 'defaults',
+                        targets: '> 0.25%, last 2 versions, not dead, not IE 11',
                         useBuiltIns: 'usage',
-                        corejs: '3.20'
+                        corejs: '3.80'
                     }]
                 ],
                 exclude: ['node_modules/**', '../../node_modules/**']
@@ -75,7 +75,8 @@ export default [
             file: pkg['umd:main'],
             format: 'umd',
             name: 'GhostSeriesDisplay',
-            sourcemap: true
+            sourcemap: true,
+            plugins: [terser()]
         },
         plugins: [
             resolve({
@@ -88,10 +89,10 @@ export default [
                 babelHelpers: 'bundled',
                 presets: [
                     ['@babel/preset-env', {
-                        modules: false,
-                        targets: 'defaults',
+                        modules: 'auto',
+                        targets: '> 0.25%, last 2 versions, not dead, not IE 11',
                         useBuiltIns: 'usage',
-                        corejs: '3.20'
+                        corejs: '3.80'
                     }]
                 ],
                 exclude: ['node_modules/**', '../../node_modules/**']
@@ -99,8 +100,7 @@ export default [
             replace({
                 preventAssignment: true,
                 'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
-            }),
-            terser()
+            })
         ]
     }
 ];
