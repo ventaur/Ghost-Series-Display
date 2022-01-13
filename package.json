@@ -49,8 +49,5 @@
     "rollup-plugin-terser": "^7.0.2",
     "sinon": "^12.0.1",
     "slugify": "^1.6.4"
-  },
-  "dependencies": {
-    "@tryghost/content-api": "^1.5.16"
   }
 }
