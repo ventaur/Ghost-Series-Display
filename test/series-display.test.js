@@ -72,6 +72,26 @@ describe('SeriesDisplay', function () {
                 anchors.length.should.equal(seriesPosts.length);
             });
         });
+        
+        describe('for double series tag', function () {
+            let seriesPosts, currentPost, document;
+
+            before(async function () {
+                seriesPosts = decDailyAndFluffyPosts;
+                currentPost = seriesPosts[1];
+                const options = {
+                    currentPostId: currentPost.id
+                };
+                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagDecDaily, SeriesTagFluffy], options);
+                ({ document } = parseHTML(html));
+            });
+
+            it('contains 2 ordered lists', function () {
+                const list = document.querySelectorAll('ol');
+                should.exist(list);
+                list.length.should.equal(2);
+            });
+        });
 
         it('caches repeat API calls for same series tags', async function () {
             const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
