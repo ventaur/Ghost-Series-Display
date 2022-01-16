@@ -14,8 +14,15 @@ const should = chai.should();
 
 
 describe('SeriesDisplay', function () {
-    let fluffyPosts, decDailyAndFluffyPosts;
-    let seriesDisplayForFluffyPosts, seriesDisplayForDecDailyAndFluffyPosts;
+    /** @type {Array<Object>} */
+    let fluffyPosts;
+    /** @type {Array<Object>} */
+    let decDailyAndFluffyPosts;
+    
+    /** @type {SeriesDisplay} */
+    let seriesDisplayForFluffyPosts;
+    /** @type {SeriesDisplay} */
+    let seriesDisplayForDecDailyAndFluffyPosts;
 
     before(function () {
         ({ seriesDisplay: seriesDisplayForFluffyPosts, posts: fluffyPosts } = createSeriesDisplayWithFluffyPosts());
@@ -25,11 +32,17 @@ describe('SeriesDisplay', function () {
 
     describe('#getSeriesInfoHtml', function () {
         describe('for single series tag', function () {
-            let seriesPosts, currentPost, document;
+            /** @type {Array<Object>} */
+            let seriesPosts;
+            let currentPost;
+            
+            /** @type {Document} */
+            let document;
 
             before(async function () {
                 seriesPosts = fluffyPosts;
                 currentPost = seriesPosts[1];
+                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
                 const options = {
                     currentPostId: currentPost.id
                 };
@@ -74,11 +87,17 @@ describe('SeriesDisplay', function () {
         });
         
         describe('for double series tag', function () {
-            let seriesPosts, currentPost, document;
+            /** @type {Array<Object>} */
+            let seriesPosts;
+            let currentPost;
+
+            /** @type {Document} */
+            let document;
 
             before(async function () {
                 seriesPosts = decDailyAndFluffyPosts;
                 currentPost = seriesPosts[1];
+                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
                 const options = {
                     currentPostId: currentPost.id
                 };

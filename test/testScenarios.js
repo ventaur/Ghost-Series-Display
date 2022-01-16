@@ -7,10 +7,18 @@ import SeriesDisplay from '../lib/index.js';
 export const SeriesTagDecDaily = 'series-december-daily-2021';
 export const SeriesTagFluffy = 'series-fluffy-2021';
 
+/** @type Object */
 const TagsBySlug = await loadJsonFile('./test/test-tags.json');
+/** @type Array<Object> */
 const TestPosts = await loadJsonFile('./test/test-posts.json'); // 12 posts
 
 
+/**
+ * Adds a tag to posts spcecified in-place (mutates posts).
+ * @param {string} tagSlug The slug for a tag to add to the posts.
+ * @param {Array<Object>} posts An array of post objects.
+ * @param {Array<number>} postIndeces An array of indeces for the posts to add the tag to.
+ */
 function addTagToPosts(tagSlug, posts, postIndeces) {
     const tag = TagsBySlug[tagSlug];
 
@@ -28,15 +36,36 @@ function addTagToPosts(tagSlug, posts, postIndeces) {
     }
 }
 
+/**
+ * 
+ * @param {Array<Object>} posts An array of post objects to be returned by this fake API's posts.browse "endpoint".
+ * @returns {import('../lib/index.js').GhostContentAPI} A fake Ghost Content API.
+ */
 function createApi(posts) {
     return { posts: { browse: async () => ({ posts }) } };
 }
 
+/**
+ * Maps specific post properties onto a list of posts.
+ * @param {Array<Object>} posts An array of posts to map properties to.
+ * @returns {Array<Object>} Returns a new array of post objects, with just the properties expected.
+ */
 function mapPostProperties(posts) {
     return posts.map(post => ({ id: post.id, title: post.title, slug: post.slug, tags: post.tags }));
 }
 
 
+/**
+ * @typedef {Object} SeriesDisplayWithPosts
+ * @property {SeriesDisplay} seriesDisplay An instance of SeriesDisplay with fake API.
+ * @property {Array<Object>} posts An array of posts for the test scenario.
+ */
+
+
+/**
+ * Creates a test scenario for SeriesDisplay with posts for a single series tag, "Fluffy 2021".
+ * @returns {SeriesDisplayWithPosts}
+ */
 export function createSeriesDisplayWithFluffyPosts() {
     // 8 posts
     const fluffyPosts = TestPosts.slice(4);
@@ -50,7 +79,11 @@ export function createSeriesDisplayWithFluffyPosts() {
     };
 }
 
-export function createSeriesDisplayWithDecDailyAndFluffyPosts() {
+/**
+ * Creates a test scenario for SeriesDisplay with posts for 2 series tags, "December Daily 2021" and "Fluffy 2021".
+ * @returns {SeriesDisplayWithPosts}
+ */
+ export function createSeriesDisplayWithDecDailyAndFluffyPosts() {
     // 12 posts
     const posts = mapPostProperties(cloneDeep(TestPosts));
     addTagToPosts(SeriesTagDecDaily, posts, [0, 1, 2, 3, 10]);
