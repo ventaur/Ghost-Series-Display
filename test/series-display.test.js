@@ -4,6 +4,7 @@ import sinon from 'sinon';
 
 import {
     SeriesTagSlugDecDaily, SeriesTagSlugFluffy, 
+    TagsBySlug,
     createSeriesDisplayWithFluffyPosts,
     createSeriesDisplayWithDecDailyAndFluffyPosts
 } from './testScenarios.js';
@@ -50,10 +51,21 @@ describe('SeriesDisplay', function () {
                 ({ document } = parseHTML(html));
             });
 
-            it('contains an ordered list', function () {
-                const list = document.querySelectorAll('ol');
-                should.exist(list);
-                list.length.should.equal(1);
+            it('contains a heading, each in an aside', function () {
+                const headings = document.querySelectorAll('aside > h1');
+                should.exist(headings);
+                headings.length.should.equal(1);
+            });
+
+            it('contains a title in the heading', function () {
+                const headings = document.querySelectorAll('aside > h1');
+                headings[0].textContent.should.contain(`Other Posts in ${TagsBySlug[SeriesTagSlugFluffy].name}`);
+            });
+
+            it('contains an ordered list in an aside', function () {
+                const lists = document.querySelectorAll('aside > ol');
+                should.exist(lists);
+                lists.length.should.equal(1);
             });
 
             it('contains 1 list item per post', function () {
@@ -116,10 +128,22 @@ describe('SeriesDisplay', function () {
                 ({ document } = parseHTML(html));
             });
 
-            it('contains 2 ordered lists', function () {
-                const list = document.querySelectorAll('ol');
-                should.exist(list);
-                list.length.should.equal(2);
+            it('contains 2 headings, each in an aside', function () {
+                const headings = document.querySelectorAll('aside > h1');
+                should.exist(headings);
+                headings.length.should.equal(2);
+            });
+
+            it('contains a title in each heading', function () {
+                const headings = document.querySelectorAll('aside > h1');
+                headings[0].textContent.should.contain(`Other Posts in ${TagsBySlug[SeriesTagSlugDecDaily].name}`);
+                headings[1].textContent.should.contain(`Other Posts in ${TagsBySlug[SeriesTagSlugFluffy].name}`);
+            });
+
+            it('contains 2 ordered lists in an aside', function () {
+                const lists = document.querySelectorAll('aside > ol');
+                should.exist(lists);
+                lists.length.should.equal(2);
             });
 
             it('contains 1 list item per post per series', function () {
