@@ -91,7 +91,7 @@ describe('SeriesDisplay', function () {
 
             it('contains an anchor for all posts if no current id specified', async function () {
                 const html = await seriesDisplayForFluffyPosts.buildSeriesInfoHtml(SeriesTagSlugFluffy);
-                ({ document } = parseHTML(html));
+                const { document } = parseHTML(html);
 
                 const anchors = document.querySelectorAll('ol > li > a');
                 anchors.length.should.equal(seriesPosts.length);
@@ -183,7 +183,7 @@ describe('SeriesDisplay', function () {
                     currentPostId: postInBothSeries.id
                 };
                 const html = await seriesDisplayForDecDailyAndFluffyPosts.buildSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy], options);
-                ({ document } = parseHTML(html));
+                const { document } = parseHTML(html);
 
                 const anchors = document.querySelectorAll('ol > li > a');
                 anchors.length.should.equal(fluffyPosts.length + decDailyPosts.length - 2);
@@ -195,7 +195,7 @@ describe('SeriesDisplay', function () {
 
             it('contains an anchor for all posts if no current id specified', async function () {
                 const html = await seriesDisplayForDecDailyAndFluffyPosts.buildSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy]);
-                ({ document } = parseHTML(html));
+                const { document } = parseHTML(html);
 
                 const anchors = document.querySelectorAll('ol > li > a');
                 anchors.length.should.equal(fluffyPosts.length + decDailyPosts.length);
