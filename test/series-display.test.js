@@ -3,7 +3,7 @@ import { parseHTML } from 'linkedom';
 import sinon from 'sinon';
 
 import {
-    SeriesTagDecDaily, SeriesTagFluffy, 
+    SeriesTagSlugDecDaily, SeriesTagSlugFluffy, 
     createSeriesDisplayWithFluffyPosts,
     createSeriesDisplayWithDecDailyAndFluffyPosts
 } from './testScenarios.js';
@@ -46,7 +46,7 @@ describe('SeriesDisplay', function () {
                 const options = {
                     currentPostId: currentPost.id
                 };
-                const html = await seriesDisplayForFluffyPosts.getSeriesInfoHtml(SeriesTagFluffy, options);
+                const html = await seriesDisplayForFluffyPosts.getSeriesInfoHtml(SeriesTagSlugFluffy, options);
                 ({ document } = parseHTML(html));
             });
 
@@ -78,7 +78,7 @@ describe('SeriesDisplay', function () {
             });
 
             it('contains an anchor for all posts if no current id specified', async function () {
-                const html = await seriesDisplayForFluffyPosts.getSeriesInfoHtml(SeriesTagFluffy);
+                const html = await seriesDisplayForFluffyPosts.getSeriesInfoHtml(SeriesTagSlugFluffy);
                 ({ document } = parseHTML(html));
 
                 const anchors = document.querySelectorAll('ol > li > a');
@@ -103,16 +103,16 @@ describe('SeriesDisplay', function () {
             before(async function () {
                 seriesPosts = decDailyAndFluffyPosts;
                 currentPost = seriesPosts[1];
-                postInBothSeries = filterPostsWithAllTags(seriesPosts, SeriesTagFluffy, SeriesTagDecDaily)[0];
+                postInBothSeries = filterPostsWithAllTags(seriesPosts, SeriesTagSlugFluffy, SeriesTagSlugDecDaily)[0];
 
-                fluffyPosts = filterPostsWithTag(seriesPosts, SeriesTagFluffy);
-                decDailyPosts = filterPostsWithTag(seriesPosts, SeriesTagDecDaily);
+                fluffyPosts = filterPostsWithTag(seriesPosts, SeriesTagSlugFluffy);
+                decDailyPosts = filterPostsWithTag(seriesPosts, SeriesTagSlugDecDaily);
 
                 /** @type import('../lib/index.js').BuildSeriesInfoOptions */
                 const options = {
                     currentPostId: currentPost.id
                 };
-                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagDecDaily, SeriesTagFluffy], options);
+                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy], options);
                 ({ document } = parseHTML(html));
             });
 
@@ -158,7 +158,7 @@ describe('SeriesDisplay', function () {
                 const options = {
                     currentPostId: postInBothSeries.id
                 };
-                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagDecDaily, SeriesTagFluffy], options);
+                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy], options);
                 ({ document } = parseHTML(html));
 
                 const anchors = document.querySelectorAll('ol > li > a');
@@ -170,7 +170,7 @@ describe('SeriesDisplay', function () {
             });
 
             it('contains an anchor for all posts if no current id specified', async function () {
-                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagDecDaily, SeriesTagFluffy]);
+                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy]);
                 ({ document } = parseHTML(html));
 
                 const anchors = document.querySelectorAll('ol > li > a');
@@ -182,11 +182,11 @@ describe('SeriesDisplay', function () {
             const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
             const seriesDisplay = new SeriesDisplay(api);
 
-            await seriesDisplay.getSeriesInfoHtml(SeriesTagFluffy);
-            await seriesDisplay.getSeriesInfoHtml(SeriesTagFluffy);
+            await seriesDisplay.getSeriesInfoHtml(SeriesTagSlugFluffy);
+            await seriesDisplay.getSeriesInfoHtml(SeriesTagSlugFluffy);
             api.posts.browse.callCount.should.equal(1);
 
-            await seriesDisplay.getSeriesInfoHtml(SeriesTagDecDaily);
+            await seriesDisplay.getSeriesInfoHtml(SeriesTagSlugDecDaily);
             api.posts.browse.callCount.should.equal(2);
         });
     });

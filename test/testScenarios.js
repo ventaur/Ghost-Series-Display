@@ -4,11 +4,11 @@ import { loadJsonFile } from 'load-json-file';
 import SeriesDisplay from '../lib/index.js';
 
 
-export const SeriesTagDecDaily = 'series-december-daily-2021';
-export const SeriesTagFluffy = 'series-fluffy-2021';
+export const SeriesTagSlugDecDaily = 'series-december-daily-2021';
+export const SeriesTagSlugFluffy = 'series-fluffy-2021';
 
 /** @type Object */
-const TagsBySlug = await loadJsonFile('./test/test-tags.json');
+export const TagsBySlug = await loadJsonFile('./test/test-tags.json');
 /** @type Array<Object> */
 const TestPosts = await loadJsonFile('./test/test-posts.json'); // 12 posts
 
@@ -58,7 +58,7 @@ function mapPostProperties(posts) {
 /**
  * @typedef {Object} SeriesDisplayWithPosts
  * @property {SeriesDisplay} seriesDisplay An instance of SeriesDisplay with fake API.
- * @property {Array<Object>} posts An array of posts for the test scenario.
+ * @property {Array<Object>} posts An array of post objects for the test scenario.
  */
 
 
@@ -70,7 +70,7 @@ export function createSeriesDisplayWithFluffyPosts() {
     // 8 posts
     const fluffyPosts = TestPosts.slice(4);
     const posts = mapPostProperties(cloneDeep(fluffyPosts));
-    addTagToPosts(SeriesTagFluffy, posts);
+    addTagToPosts(SeriesTagSlugFluffy, posts);
     
     const api = createApi(posts);
     return {
@@ -86,8 +86,8 @@ export function createSeriesDisplayWithFluffyPosts() {
  export function createSeriesDisplayWithDecDailyAndFluffyPosts() {
     // 12 posts, 1 in both series
     const posts = mapPostProperties(cloneDeep(TestPosts));
-    addTagToPosts(SeriesTagDecDaily, posts, [0, 1, 2, 3, 10]);
-    addTagToPosts(SeriesTagFluffy, posts, [4, 5, 6, 7, 8, 9, 10, 11]);
+    addTagToPosts(SeriesTagSlugDecDaily, posts, [0, 1, 2, 3, 10]);
+    addTagToPosts(SeriesTagSlugFluffy, posts, [4, 5, 6, 7, 8, 9, 10, 11]);
     
     const api = createApi(posts);
     return {
