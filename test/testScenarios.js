@@ -84,7 +84,7 @@ export function createSeriesDisplayWithFluffyPosts() {
  * @returns {SeriesDisplayWithPosts}
  */
  export function createSeriesDisplayWithDecDailyAndFluffyPosts() {
-    // 12 posts
+    // 12 posts, 1 in both series
     const posts = mapPostProperties(cloneDeep(TestPosts));
     addTagToPosts(SeriesTagDecDaily, posts, [0, 1, 2, 3, 10]);
     addTagToPosts(SeriesTagFluffy, posts, [4, 5, 6, 7, 8, 9, 10, 11]);
