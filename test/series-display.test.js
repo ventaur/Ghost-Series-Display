@@ -47,7 +47,7 @@ describe('SeriesDisplay', function () {
                 const options = {
                     currentPostId: currentPost.id
                 };
-                const html = await seriesDisplayForFluffyPosts.getSeriesInfoHtml(SeriesTagSlugFluffy, options);
+                const html = await seriesDisplayForFluffyPosts.buildSeriesInfoHtml(SeriesTagSlugFluffy, options);
                 ({ document } = parseHTML(html));
             });
 
@@ -90,7 +90,7 @@ describe('SeriesDisplay', function () {
             });
 
             it('contains an anchor for all posts if no current id specified', async function () {
-                const html = await seriesDisplayForFluffyPosts.getSeriesInfoHtml(SeriesTagSlugFluffy);
+                const html = await seriesDisplayForFluffyPosts.buildSeriesInfoHtml(SeriesTagSlugFluffy);
                 ({ document } = parseHTML(html));
 
                 const anchors = document.querySelectorAll('ol > li > a');
@@ -124,7 +124,7 @@ describe('SeriesDisplay', function () {
                 const options = {
                     currentPostId: currentPost.id
                 };
-                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy], options);
+                const html = await seriesDisplayForDecDailyAndFluffyPosts.buildSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy], options);
                 ({ document } = parseHTML(html));
             });
 
@@ -182,7 +182,7 @@ describe('SeriesDisplay', function () {
                 const options = {
                     currentPostId: postInBothSeries.id
                 };
-                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy], options);
+                const html = await seriesDisplayForDecDailyAndFluffyPosts.buildSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy], options);
                 ({ document } = parseHTML(html));
 
                 const anchors = document.querySelectorAll('ol > li > a');
@@ -194,7 +194,7 @@ describe('SeriesDisplay', function () {
             });
 
             it('contains an anchor for all posts if no current id specified', async function () {
-                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy]);
+                const html = await seriesDisplayForDecDailyAndFluffyPosts.buildSeriesInfoHtml([SeriesTagSlugDecDaily, SeriesTagSlugFluffy]);
                 ({ document } = parseHTML(html));
 
                 const anchors = document.querySelectorAll('ol > li > a');
@@ -206,11 +206,11 @@ describe('SeriesDisplay', function () {
             const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
             const seriesDisplay = new SeriesDisplay(api);
 
-            await seriesDisplay.getSeriesInfoHtml(SeriesTagSlugFluffy);
-            await seriesDisplay.getSeriesInfoHtml(SeriesTagSlugFluffy);
+            await seriesDisplay.buildSeriesInfoHtml(SeriesTagSlugFluffy);
+            await seriesDisplay.buildSeriesInfoHtml(SeriesTagSlugFluffy);
             api.posts.browse.callCount.should.equal(1);
 
-            await seriesDisplay.getSeriesInfoHtml(SeriesTagSlugDecDaily);
+            await seriesDisplay.buildSeriesInfoHtml(SeriesTagSlugDecDaily);
             api.posts.browse.callCount.should.equal(2);
         });
     });
