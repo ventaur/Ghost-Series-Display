@@ -90,6 +90,12 @@ describe('SeriesDisplay', function () {
             /** @type {Array<Object>} */
             let seriesPosts;
             let currentPost;
+            let postInBothSeries;
+
+            /** @type {Array<Object>} */
+            let fluffyPosts;
+            /** @type {Array<Object>} */
+            let decDailyPosts;
 
             /** @type {Document} */
             let document;
@@ -97,6 +103,11 @@ describe('SeriesDisplay', function () {
             before(async function () {
                 seriesPosts = decDailyAndFluffyPosts;
                 currentPost = seriesPosts[1];
+                postInBothSeries = filterPostsWithAllTags(seriesPosts, SeriesTagFluffy, SeriesTagDecDaily)[0];
+
+                fluffyPosts = filterPostsWithTag(seriesPosts, SeriesTagFluffy);
+                decDailyPosts = filterPostsWithTag(seriesPosts, SeriesTagDecDaily);
+
                 /** @type import('../lib/index.js').BuildSeriesInfoOptions */
                 const options = {
                     currentPostId: currentPost.id
@@ -109,6 +120,61 @@ describe('SeriesDisplay', function () {
                 const list = document.querySelectorAll('ol');
                 should.exist(list);
                 list.length.should.equal(2);
+            });
+
+            it('contains 1 list item per post per series', function () {
+                const listItems = document.querySelectorAll('ol > li');
+                listItems.length.should.equal(fluffyPosts.length + decDailyPosts.length);
+            });
+            
+            it('contains series post title per list item', function () {
+                const listItems = document.querySelectorAll('ol > li');
+                const listItemsText = [...listItems].map(item => item.textContent);
+                const postTitles = [].concat(
+                    decDailyPosts.map(post => post.title),
+                    fluffyPosts.map(post => post.title)
+                );
+                listItemsText.should.deep.equal(postTitles);
+            });
+
+            it('contains same list item twice for post in both series', function () {
+                const listItems = document.querySelectorAll('ol > li');
+                const listItemsText = [...listItems].map(item => item.textContent);
+                const textsForPostInBothSeries = listItemsText.filter(text => text === postInBothSeries.title);
+                textsForPostInBothSeries.length.should.equal(2);
+            });
+
+            it('contains an anchor for all except current post', function () {
+                const anchors = document.querySelectorAll('ol > li > a');
+                anchors.length.should.equal(fluffyPosts.length + decDailyPosts.length - 1);
+
+                const listItems = document.querySelectorAll('ol > li');
+                const listItemWithoutAnchor = [...listItems].find(item => item.querySelector('a') === null);
+                listItemWithoutAnchor.textContent.should.equal(currentPost.title);
+            });
+
+            it('contains an anchor for all except 2 when current post in both series', async function () {
+                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                const options = {
+                    currentPostId: postInBothSeries.id
+                };
+                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagDecDaily, SeriesTagFluffy], options);
+                ({ document } = parseHTML(html));
+
+                const anchors = document.querySelectorAll('ol > li > a');
+                anchors.length.should.equal(fluffyPosts.length + decDailyPosts.length - 2);
+
+                const listItems = document.querySelectorAll('ol > li');
+                const listItemsWithoutAnchor = [...listItems].filter(item => item.querySelector('a') === null);
+                listItemsWithoutAnchor.every(listItem => listItem.textContent.should.equal(postInBothSeries.title));
+            });
+
+            it('contains an anchor for all posts if no current id specified', async function () {
+                const html = await seriesDisplayForDecDailyAndFluffyPosts.getSeriesInfoHtml([SeriesTagDecDaily, SeriesTagFluffy]);
+                ({ document } = parseHTML(html));
+
+                const anchors = document.querySelectorAll('ol > li > a');
+                anchors.length.should.equal(fluffyPosts.length + decDailyPosts.length);
             });
         });
 
@@ -129,3 +195,34 @@ describe('SeriesDisplay', function () {
         
     });
 });
+
+
+/**
+ * Filters to the posts with all the specified tags (slugs).
+ * @param {Array<Object>} posts An array of posts to filter.
+ * @param  {...string} tagSlugs The slugs for tags to filter posts with. 
+ * @returns {Array<object>} The filtered array of posts.
+ */
+function filterPostsWithAllTags(posts, ...tagSlugs) {
+    return posts.filter(
+        post => tagSlugs.every(
+            tagSlug => post.tags.some(
+                tag => tag.slug === tagSlug
+            )
+        )
+    );
+}
+
+/**
+ * Filters to the posts with a specified tag (slug).
+ * @param {Array<Object>} posts An array of posts to filter.
+ * @param {string} tagSlug The slug for a tag to filter posts with.
+ * @returns {Array<object>} The filtered array of posts.
+ */
+function filterPostsWithTag(posts, tagSlug) {
+    return posts.filter(
+        post => post.tags.some(
+            tag => tag.slug === tagSlug
+        )
+    );
+}
