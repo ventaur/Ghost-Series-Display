@@ -58,7 +58,7 @@ describe('SeriesDisplay', function () {
             });
 
             it('contains a title in the heading', function () {
-                const headings = document.querySelectorAll('aside > h1');
+                const headings = document.querySelectorAll('h1');
                 headings[0].textContent.should.contain(`Other Posts in ${TagsBySlug[SeriesTagSlugFluffy].name}`);
             });
 
@@ -135,7 +135,7 @@ describe('SeriesDisplay', function () {
             });
 
             it('contains a title in each heading', function () {
-                const headings = document.querySelectorAll('aside > h1');
+                const headings = document.querySelectorAll('h1');
                 headings[0].textContent.should.contain(`Other Posts in ${TagsBySlug[SeriesTagSlugDecDaily].name}`);
                 headings[1].textContent.should.contain(`Other Posts in ${TagsBySlug[SeriesTagSlugFluffy].name}`);
             });
