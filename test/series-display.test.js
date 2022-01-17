@@ -96,6 +96,15 @@ describe('SeriesDisplay', function () {
                 const anchors = document.querySelectorAll('ol > li > a');
                 anchors.length.should.equal(seriesPosts.length);
             });
+
+            it('contains anchors with hrefs to post urls', function () {
+                const anchors = document.querySelectorAll('a');
+                const anchorHrefs = [...anchors].map(a => a.getAttribute('href'));
+                const postUrls = seriesPosts
+                    .filter(post => post !== currentPost)
+                    .map(post => post.url);
+                anchorHrefs.should.deep.equal(postUrls);
+            });
         });
         
         describe('for double series tag', function () {
@@ -199,6 +208,15 @@ describe('SeriesDisplay', function () {
 
                 const anchors = document.querySelectorAll('ol > li > a');
                 anchors.length.should.equal(fluffyPosts.length + decDailyPosts.length);
+            });
+
+            it('contains anchors with hrefs to post urls', function () {
+                const anchors = document.querySelectorAll('a');
+                const anchorHrefs = [...anchors].map(a => a.getAttribute('href'));
+                const postUrls = decDailyPosts.concat(fluffyPosts)
+                    .filter(post => post !== currentPost)
+                    .map(post => post.url);
+                anchorHrefs.should.deep.equal(postUrls);
             });
         });
 

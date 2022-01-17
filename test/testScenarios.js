@@ -51,7 +51,7 @@ function createApi(posts) {
  * @returns {Array<Object>} Returns a new array of post objects, with just the properties expected.
  */
 function mapPostProperties(posts) {
-    return posts.map(post => ({ id: post.id, title: post.title, slug: post.slug, tags: post.tags }));
+    return posts.map(post => ({ id: post.id, title: post.title, slug: post.slug, url: post.url, tags: post.tags }));
 }
 
 
