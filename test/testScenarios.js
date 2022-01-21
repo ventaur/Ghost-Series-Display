@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash.clonedeep';
 import { loadJsonFile } from 'load-json-file';
+import { loadTextFile } from 'load-text-file';
 
 import SeriesDisplay from '../lib/index.js';
 
@@ -11,6 +12,9 @@ export const SeriesTagSlugFluffy = 'series-fluffy-2021';
 export const TagsBySlug = await loadJsonFile('./test/test-tags.json');
 /** @type Array<Object> */
 const TestPosts = await loadJsonFile('./test/test-posts.json'); // 12 posts
+
+/** @type string */
+export const BasicPostHtml = await loadTextFile('./test/basic-post.html');
 
 
 /**

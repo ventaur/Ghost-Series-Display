@@ -5,7 +5,7 @@ import sinon from 'sinon';
 
 import {
     SeriesTagSlugDecDaily, SeriesTagSlugFluffy, 
-    TagsBySlug,
+    TagsBySlug, BasicPostHtml,
     createSeriesDisplayWithFluffyPosts,
     createSeriesDisplayWithDecDailyAndFluffyPosts
 } from './testScenarios.js';
@@ -237,7 +237,202 @@ describe('SeriesDisplay', function () {
     });
 
     describe('#displaySeriesInfo', function () {
-        
+        describe('for single series tag', function () {
+            /** @type {Array<Object>} */
+            let seriesPosts;
+            let currentPost;
+            
+            /** @type {Document} */
+            let document;
+
+            before(async function () {
+                seriesPosts = fluffyPosts;
+                currentPost = seriesPosts[1];
+
+                ({ document } = parseHTML(BasicPostHtml));
+                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                const options = {
+                    currentPostId: currentPost.id,
+                    seriesTagSlugs: SeriesTagSlugFluffy
+                };
+                await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+            });
+
+            it('inserts a heading in an aside', function () {
+                assertHeadingInAside(document, 1);
+            });
+
+            it('inserts a title in the heading', function () {
+                assertTitleInHeading(document, [ TagsBySlug[SeriesTagSlugFluffy].name ]);
+            });
+
+            it('inserts an ordered list in an aside', function () {
+                assertOrderedListInAside(document, 1);
+            });
+
+            it('inserts 1 list item per post', function () {
+                assertListItemsInOrderedList(document, seriesPosts.length);
+            });
+            
+            it('inserts series post title per list item', function () {
+                const postTitles = seriesPosts.map(post => post.title);
+                assertTextForListItems(document, postTitles);
+            });
+
+            it('inserts an anchor for all except current post', function () {
+                assertAnchorsInListItemsExcept(document, seriesPosts.length - 1, currentPost.title);
+            });
+
+            it('inserts an anchor for all posts if no current id specified', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                const options = {
+                    seriesTagSlugs: SeriesTagSlugFluffy
+                }
+                await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+                
+                assertAnchorsInListItems(document, seriesPosts.length);
+            });
+
+            it('inserts anchors with hrefs to post urls', function () {
+                const postUrls = seriesPosts
+                    .filter(post => post !== currentPost)
+                    .map(post => post.url);
+                assertUrlsForAnchorHrefs(document, postUrls);
+            });
+        });
+
+        describe('for double series tag', function () {
+            /** @type {Array<Object>} */
+            let seriesPosts;
+            let currentPost;
+            let postInBothSeries;
+
+            /** @type {Array<Object>} */
+            let fluffyPosts;
+            /** @type {Array<Object>} */
+            let decDailyPosts;
+
+            /** @type {Document} */
+            let document;
+
+            before(async function () {
+                seriesPosts = decDailyAndFluffyPosts;
+                currentPost = seriesPosts[1];
+                postInBothSeries = filterPostsWithAllTags(seriesPosts, SeriesTagSlugFluffy, SeriesTagSlugDecDaily)[0];
+
+                fluffyPosts = filterPostsWithTag(seriesPosts, SeriesTagSlugFluffy);
+                decDailyPosts = filterPostsWithTag(seriesPosts, SeriesTagSlugDecDaily);
+
+                ({ document } = parseHTML(BasicPostHtml));
+                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                const options = {
+                    currentPostId: currentPost.id,
+                    seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
+                };
+                await seriesDisplayForDecDailyAndFluffyPosts.displaySeriesInfo(document, options);
+            });
+
+            it('inserts 2 headings, each in an aside', function () {
+                assertHeadingInAside(document, 2);
+            });
+
+            it('inserts a title in each heading', function () {
+                assertTitleInHeading(document, [ TagsBySlug[SeriesTagSlugDecDaily].name, TagsBySlug[SeriesTagSlugFluffy].name ]);
+            });
+
+            it('inserts 2 ordered lists in an aside', function () {
+                assertOrderedListInAside(document, 2);
+            });
+
+            it('inserts 1 list item per post per series', function () {
+                assertListItemsInOrderedList(document, fluffyPosts.length + decDailyPosts.length);
+            });
+            
+            it('inserts series post title per list item', function () {
+                const postTitles = [].concat(
+                    decDailyPosts.map(post => post.title),
+                    fluffyPosts.map(post => post.title)
+                );
+                assertTextForListItems(document, postTitles);
+            });
+
+            it('inserts same list item twice for post in both series', function () {
+                assertSameListItemTextTwice(document, postInBothSeries.title);
+            });
+
+            it('inserts an anchor for all except current post', function () {
+                assertAnchorsInListItemsExcept(document, fluffyPosts.length + decDailyPosts.length - 1, currentPost.title);
+            });
+
+            it('inserts an anchor for all except 2 when current post in both series', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                const options = {
+                    currentPostId: postInBothSeries.id,
+                    seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
+                };
+                await seriesDisplayForDecDailyAndFluffyPosts.displaySeriesInfo(document, options);
+                
+                assertAnchorsInListItemsExcept(document, fluffyPosts.length + decDailyPosts.length - 2, postInBothSeries.title);
+            });
+
+            it('inserts an anchor for all posts if no current id specified', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                const options = {
+                    seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
+                };
+                await seriesDisplayForDecDailyAndFluffyPosts.displaySeriesInfo(document, options);
+                
+                assertAnchorsInListItems(document, fluffyPosts.length + decDailyPosts.length);
+            });
+
+            it('inserts anchors with hrefs to post urls', function () {
+                const postUrls = decDailyPosts.concat(fluffyPosts)
+                    .filter(post => post !== currentPost)
+                    .map(post => post.url);
+                assertUrlsForAnchorHrefs(document, postUrls)
+            });
+        });
+
+        it('caches repeat API calls for same series tags', async function () {
+            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML('');
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const singleTagOptions = {
+                seriesTagSlugs: SeriesTagSlugFluffy
+            };
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const bothTagsOptions = {
+                seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
+            };
+
+            await seriesDisplay.buildSeriesInfoFragment(document, singleTagOptions);
+            await seriesDisplay.buildSeriesInfoFragment(document, singleTagOptions);
+            api.posts.browse.callCount.should.equal(1);
+
+            await seriesDisplay.buildSeriesInfoFragment(document, bothTagsOptions);
+            api.posts.browse.callCount.should.equal(2);
+        });
+
+        it('throws if document is undefined', async function () {
+            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy
+            }
+
+            await seriesDisplay.displaySeriesInfo(undefined, options).should.be.rejectedWith(TypeError, /document must be provided/);
+        });
     });
 });
 
