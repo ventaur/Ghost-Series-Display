@@ -12,7 +12,6 @@ import {
 
 import SeriesDisplay from '../lib/index.js';
 
-const should = chai.should();
 chai.use(chaiAsPromised);
 
 
@@ -58,7 +57,6 @@ describe('SeriesDisplay', function () {
 
             it('contains a heading, each in an aside', function () {
                 const headings = fragment.querySelectorAll('aside > h1');
-                should.exist(headings);
                 headings.length.should.equal(1);
             });
 
@@ -69,7 +67,6 @@ describe('SeriesDisplay', function () {
 
             it('contains an ordered list in an aside', function () {
                 const lists = fragment.querySelectorAll('aside > ol');
-                should.exist(lists);
                 lists.length.should.equal(1);
             });
 
@@ -151,7 +148,6 @@ describe('SeriesDisplay', function () {
 
             it('contains 2 headings, each in an aside', function () {
                 const headings = fragment.querySelectorAll('aside > h1');
-                should.exist(headings);
                 headings.length.should.equal(2);
             });
 
@@ -163,7 +159,6 @@ describe('SeriesDisplay', function () {
 
             it('contains 2 ordered lists in an aside', function () {
                 const lists = fragment.querySelectorAll('aside > ol');
-                should.exist(lists);
                 lists.length.should.equal(2);
             });
 
