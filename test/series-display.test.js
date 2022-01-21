@@ -55,40 +55,29 @@ describe('SeriesDisplay', function () {
                 fragment = await seriesDisplayForFluffyPosts.buildSeriesInfoFragment(document, options);
             });
 
-            it('contains a heading, each in an aside', function () {
-                const headings = fragment.querySelectorAll('aside > h1');
-                headings.length.should.equal(1);
+            it('contains a heading in an aside', function () {
+                assertHeadingInAside(fragment, 1);
             });
 
             it('contains a title in the heading', function () {
-                const headings = fragment.querySelectorAll('h1');
-                headings[0].textContent.should.contain(`Other Posts in ${TagsBySlug[SeriesTagSlugFluffy].name}`);
+                assertTitleInHeading(fragment, [ TagsBySlug[SeriesTagSlugFluffy].name ]);
             });
 
             it('contains an ordered list in an aside', function () {
-                const lists = fragment.querySelectorAll('aside > ol');
-                lists.length.should.equal(1);
+                assertOrderedListInAside(fragment, 1);
             });
 
             it('contains 1 list item per post', function () {
-                const listItems = fragment.querySelectorAll('ol > li');
-                listItems.length.should.equal(seriesPosts.length);
+                assertListItemsInOrderedList(fragment, seriesPosts.length);
             });
             
             it('contains series post title per list item', function () {
-                const listItems = fragment.querySelectorAll('ol > li');
-                const listItemsText = [...listItems].map(item => item.textContent);
                 const postTitles = seriesPosts.map(post => post.title);
-                listItemsText.should.deep.equal(postTitles);
+                assertTextForListItems(fragment, postTitles);
             });
 
             it('contains an anchor for all except current post', function () {
-                const anchors = fragment.querySelectorAll('ol > li > a');
-                anchors.length.should.equal(seriesPosts.length - 1);
-
-                const listItems = fragment.querySelectorAll('ol > li');
-                const listItemWithoutAnchor = [...listItems].find(item => item.querySelector('a') === null);
-                listItemWithoutAnchor.textContent.should.equal(currentPost.title);
+                assertAnchorsInListItemsExcept(fragment, seriesPosts.length - 1, currentPost.title);
             });
 
             it('contains an anchor for all posts if no current id specified', async function () {
@@ -100,17 +89,14 @@ describe('SeriesDisplay', function () {
                 }
                 const fragment = await seriesDisplayForFluffyPosts.buildSeriesInfoFragment(document, options);
                 
-                const anchors = fragment.querySelectorAll('ol > li > a');
-                anchors.length.should.equal(seriesPosts.length);
+                assertAnchorsInListItems(fragment, seriesPosts.length);
             });
 
             it('contains anchors with hrefs to post urls', function () {
-                const anchors = fragment.querySelectorAll('a');
-                const anchorHrefs = [...anchors].map(a => a.getAttribute('href'));
                 const postUrls = seriesPosts
                     .filter(post => post !== currentPost)
                     .map(post => post.url);
-                anchorHrefs.should.deep.equal(postUrls);
+                assertUrlsForAnchorHrefs(fragment, postUrls);
             });
         });
         
@@ -147,50 +133,35 @@ describe('SeriesDisplay', function () {
             });
 
             it('contains 2 headings, each in an aside', function () {
-                const headings = fragment.querySelectorAll('aside > h1');
-                headings.length.should.equal(2);
+                assertHeadingInAside(fragment, 2);
             });
 
             it('contains a title in each heading', function () {
-                const headings = fragment.querySelectorAll('h1');
-                headings[0].textContent.should.contain(`Other Posts in ${TagsBySlug[SeriesTagSlugDecDaily].name}`);
-                headings[1].textContent.should.contain(`Other Posts in ${TagsBySlug[SeriesTagSlugFluffy].name}`);
+                assertTitleInHeading(fragment, [ TagsBySlug[SeriesTagSlugDecDaily].name, TagsBySlug[SeriesTagSlugFluffy].name ]);
             });
 
             it('contains 2 ordered lists in an aside', function () {
-                const lists = fragment.querySelectorAll('aside > ol');
-                lists.length.should.equal(2);
+                assertOrderedListInAside(fragment, 2);
             });
 
             it('contains 1 list item per post per series', function () {
-                const listItems = fragment.querySelectorAll('ol > li');
-                listItems.length.should.equal(fluffyPosts.length + decDailyPosts.length);
+                assertListItemsInOrderedList(fragment, fluffyPosts.length + decDailyPosts.length);
             });
             
             it('contains series post title per list item', function () {
-                const listItems = fragment.querySelectorAll('ol > li');
-                const listItemsText = [...listItems].map(item => item.textContent);
                 const postTitles = [].concat(
                     decDailyPosts.map(post => post.title),
                     fluffyPosts.map(post => post.title)
                 );
-                listItemsText.should.deep.equal(postTitles);
+                assertTextForListItems(fragment, postTitles);
             });
 
             it('contains same list item twice for post in both series', function () {
-                const listItems = fragment.querySelectorAll('ol > li');
-                const listItemsText = [...listItems].map(item => item.textContent);
-                const textsForPostInBothSeries = listItemsText.filter(text => text === postInBothSeries.title);
-                textsForPostInBothSeries.length.should.equal(2);
+                assertSameListItemTextTwice(fragment, postInBothSeries.title);
             });
 
             it('contains an anchor for all except current post', function () {
-                const anchors = fragment.querySelectorAll('ol > li > a');
-                anchors.length.should.equal(fluffyPosts.length + decDailyPosts.length - 1);
-
-                const listItems = fragment.querySelectorAll('ol > li');
-                const listItemWithoutAnchor = [...listItems].find(item => item.querySelector('a') === null);
-                listItemWithoutAnchor.textContent.should.equal(currentPost.title);
+                assertAnchorsInListItemsExcept(fragment, fluffyPosts.length + decDailyPosts.length - 1, currentPost.title);
             });
 
             it('contains an anchor for all except 2 when current post in both series', async function () {
@@ -203,12 +174,7 @@ describe('SeriesDisplay', function () {
                 };
                 const fragment = await seriesDisplayForDecDailyAndFluffyPosts.buildSeriesInfoFragment(document, options);
                 
-                const anchors = fragment.querySelectorAll('ol > li > a');
-                anchors.length.should.equal(fluffyPosts.length + decDailyPosts.length - 2);
-
-                const listItems = fragment.querySelectorAll('ol > li');
-                const listItemsWithoutAnchor = [...listItems].filter(item => item.querySelector('a') === null);
-                listItemsWithoutAnchor.every(listItem => listItem.textContent.should.equal(postInBothSeries.title));
+                assertAnchorsInListItemsExcept(fragment, fluffyPosts.length + decDailyPosts.length - 2, postInBothSeries.title);
             });
 
             it('contains an anchor for all posts if no current id specified', async function () {
@@ -220,17 +186,14 @@ describe('SeriesDisplay', function () {
                 };
                 const fragment = await seriesDisplayForDecDailyAndFluffyPosts.buildSeriesInfoFragment(document, options);
                 
-                const anchors = fragment.querySelectorAll('ol > li > a');
-                anchors.length.should.equal(fluffyPosts.length + decDailyPosts.length);
+                assertAnchorsInListItems(fragment, fluffyPosts.length + decDailyPosts.length);
             });
 
             it('contains anchors with hrefs to post urls', function () {
-                const anchors = fragment.querySelectorAll('a');
-                const anchorHrefs = [...anchors].map(a => a.getAttribute('href'));
                 const postUrls = decDailyPosts.concat(fluffyPosts)
                     .filter(post => post !== currentPost)
                     .map(post => post.url);
-                anchorHrefs.should.deep.equal(postUrls);
+                assertUrlsForAnchorHrefs(fragment, postUrls)
             });
         });
 
@@ -275,6 +238,60 @@ describe('SeriesDisplay', function () {
     });
 });
 
+
+function assertHeadingInAside(node, expectedCount) {
+    const headings = node.querySelectorAll('aside > h1');
+    headings.length.should.equal(expectedCount);
+}
+
+function assertTitleInHeading(node, tagNames) {
+    const headings = node.querySelectorAll('h1');
+    for (const [i, tag ] of tagNames.entries()) {
+        headings[i].textContent.should.contain(`Other Posts in ${tag}`);
+    }
+}
+
+function assertOrderedListInAside(node, expectedCount) {
+    const lists = node.querySelectorAll('aside > ol');
+    lists.length.should.equal(expectedCount);
+}
+
+function assertListItemsInOrderedList(node, expectedCount) {
+    const listItems = node.querySelectorAll('ol > li');
+    listItems.length.should.equal(expectedCount);
+}
+
+function assertTextForListItems(node, texts) {
+    const listItems = node.querySelectorAll('ol > li');
+    const listItemsText = [...listItems].map(item => item.textContent);
+    listItemsText.should.deep.equal(texts);
+}
+
+function assertSameListItemTextTwice(fragment, repeatedText) {
+    const listItems = fragment.querySelectorAll('ol > li');
+    const listItemsText = [...listItems].map(item => item.textContent);
+    const textsForPostInBothSeries = listItemsText.filter(text => text === repeatedText);
+    textsForPostInBothSeries.length.should.equal(2);
+}
+
+function assertAnchorsInListItems(node, expectedCount) {
+    const anchors = node.querySelectorAll('ol > li > a');
+    anchors.length.should.equal(expectedCount);
+}
+
+function assertAnchorsInListItemsExcept(node, expectedCount, exceptionText) {
+    assertAnchorsInListItems(node, expectedCount);
+    
+    const listItems = node.querySelectorAll('ol > li');
+    const listItemWithoutAnchors = [...listItems].filter(item => item.querySelector('a') === null);
+    listItemWithoutAnchors.every(listItem => listItem.textContent.should.equal(exceptionText));
+}
+
+function assertUrlsForAnchorHrefs(node, urls) {
+    const anchors = node.querySelectorAll('a');
+    const anchorHrefs = [...anchors].map(a => a.getAttribute('href'));
+    anchorHrefs.should.deep.equal(urls);
+}
 
 /**
  * Filters to the posts with all the specified tags (slugs).
