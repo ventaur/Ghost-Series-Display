@@ -1,4 +1,5 @@
 import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { parseHTML } from 'linkedom';
 import sinon from 'sinon';
 
@@ -12,6 +13,7 @@ import {
 import SeriesDisplay from '../lib/index.js';
 
 const should = chai.should();
+chai.use(chaiAsPromised);
 
 
 describe('SeriesDisplay', function () {
@@ -258,6 +260,18 @@ describe('SeriesDisplay', function () {
 
             await seriesDisplay.buildSeriesInfoFragment(document, bothTagsOptions);
             api.posts.browse.callCount.should.equal(2);
+        });
+
+        it('throws if document is undefined', async function () {
+            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy
+            }
+
+            await seriesDisplay.buildSeriesInfoFragment(undefined, options).should.be.rejectedWith(TypeError, /document must be provided/);
         });
     });
 
