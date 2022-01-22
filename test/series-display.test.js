@@ -439,7 +439,7 @@ describe('SeriesDisplay', function () {
 
 function assertHeadingInAside(node, expectedCount) {
     const headings = node.querySelectorAll(`.${SeriesInfoClass} aside > h1`);
-    headings.length.should.equal(expectedCount);
+    headings.should.have.lengthOf(expectedCount);
 }
 
 function assertTitleInHeading(node, tagNames) {
@@ -451,12 +451,12 @@ function assertTitleInHeading(node, tagNames) {
 
 function assertOrderedListInAside(node, expectedCount) {
     const lists = node.querySelectorAll(`.${SeriesInfoClass} aside > ol`);
-    lists.length.should.equal(expectedCount);
+    lists.should.have.lengthOf(expectedCount);
 }
 
 function assertListItemsInOrderedList(node, expectedCount) {
     const listItems = node.querySelectorAll(`.${SeriesInfoClass} ol > li`);
-    listItems.length.should.equal(expectedCount);
+    listItems.should.have.lengthOf(expectedCount);
 }
 
 function assertTextForListItems(node, texts) {
@@ -469,12 +469,12 @@ function assertSameListItemTextTwice(fragment, repeatedText) {
     const listItems = fragment.querySelectorAll(`.${SeriesInfoClass} ol > li`);
     const listItemsText = [...listItems].map(item => item.textContent);
     const textsForPostInBothSeries = listItemsText.filter(text => text === repeatedText);
-    textsForPostInBothSeries.length.should.equal(2);
+    textsForPostInBothSeries.should.have.lengthOf(2);
 }
 
 function assertAnchorsInListItems(node, expectedCount) {
     const anchors = node.querySelectorAll(`.${SeriesInfoClass} ol > li > a`);
-    anchors.length.should.equal(expectedCount);
+    anchors.should.have.lengthOf(expectedCount);
 }
 
 function assertAnchorsInListItemsExcept(node, expectedCount, exceptionText) {
