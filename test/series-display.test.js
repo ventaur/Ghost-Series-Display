@@ -250,7 +250,7 @@ describe('SeriesDisplay', function () {
                 currentPost = seriesPosts[1];
 
                 ({ document } = parseHTML(BasicPostHtml));
-                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
                 const options = {
                     currentPostId: currentPost.id,
                     seriesTagSlugs: SeriesTagSlugFluffy
@@ -286,7 +286,7 @@ describe('SeriesDisplay', function () {
             it('inserts an anchor for all posts if no current id specified', async function () {
                 /** @type {Document} */
                 const { document } = parseHTML(BasicPostHtml);
-                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
                 const options = {
                     seriesTagSlugs: SeriesTagSlugFluffy
                 }
@@ -326,7 +326,7 @@ describe('SeriesDisplay', function () {
                 decDailyPosts = filterPostsWithTag(seriesPosts, SeriesTagSlugDecDaily);
 
                 ({ document } = parseHTML(BasicPostHtml));
-                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
                 const options = {
                     currentPostId: currentPost.id,
                     seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
@@ -369,7 +369,7 @@ describe('SeriesDisplay', function () {
             it('inserts an anchor for all except 2 when current post in both series', async function () {
                 /** @type {Document} */
                 const { document } = parseHTML(BasicPostHtml);
-                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
                 const options = {
                     currentPostId: postInBothSeries.id,
                     seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
@@ -382,7 +382,7 @@ describe('SeriesDisplay', function () {
             it('inserts an anchor for all posts if no current id specified', async function () {
                 /** @type {Document} */
                 const { document } = parseHTML(BasicPostHtml);
-                /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
                 const options = {
                     seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
                 };
