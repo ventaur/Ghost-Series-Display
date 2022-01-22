@@ -3,14 +3,14 @@ import chaiAsPromised from 'chai-as-promised';
 import { parseHTML } from 'linkedom';
 import sinon from 'sinon';
 
+import SeriesDisplay, { ElementInsertionPosition } from '../lib/index.js';
+
 import {
     SeriesTagSlugDecDaily, SeriesTagSlugFluffy, 
     TagsBySlug, BasicPostHtml,
     createSeriesDisplayWithFluffyPosts,
     createSeriesDisplayWithDecDailyAndFluffyPosts
 } from './testScenarios.js';
-
-import SeriesDisplay from '../lib/index.js';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -399,6 +399,92 @@ describe('SeriesDisplay', function () {
             });
         });
 
+        describe('inserts relative to selector', function () {
+            it('as first child', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+                const options = {
+                    seriesTagSlugs: SeriesTagSlugFluffy,
+                    insertions: [
+                        {
+                            selector: '.meta',
+                            position: ElementInsertionPosition.BEGIN
+                        }
+                    ]
+                };
+                await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+                assertSeriesInfoIsFirstChildOf(document, '.meta');
+            });
+
+            it('as last child', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+                const options = {
+                    seriesTagSlugs: SeriesTagSlugFluffy,
+                    insertions: [
+                        {
+                            selector: '.meta',
+                            position: ElementInsertionPosition.END
+                        }
+                    ]
+                };
+                await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+                assertSeriesInfoIsLastChildOf(document, '.meta');
+            });
+
+            it('as previous sibling', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+                const options = {
+                    seriesTagSlugs: SeriesTagSlugFluffy,
+                    insertions: [
+                        {
+                            selector: '.meta',
+                            position: ElementInsertionPosition.BEFORE
+                        }
+                    ]
+                };
+                await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+                assertSeriesInfoIsSiblingBefore(document, '.meta');
+            });
+
+            it('as next sibling', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+                const options = {
+                    seriesTagSlugs: SeriesTagSlugFluffy,
+                    insertions: [
+                        {
+                            selector: '.meta',
+                            position: ElementInsertionPosition.AFTER
+                        }
+                    ]
+                };
+                await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+                assertSeriesInfoIsSiblingAfter(document, '.meta');
+            });
+        });
+
+        it('inserts by default at end of main post element', async function () {
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy
+            };
+            await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+            assertSeriesInfoIsLastChildOf(document, 'main .post');
+        });
+
         it('caches repeat API calls for same series tags', async function () {
             const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
             const seriesDisplay = new SeriesDisplay(api);
@@ -490,6 +576,43 @@ function assertUrlsForAnchorHrefs(node, urls) {
     const anchorHrefs = [...anchors].map(a => a.getAttribute('href'));
     anchorHrefs.should.deep.equal(urls);
 }
+
+function assertSeriesInfoIsFirstChildOf(document, elementsSelector) {
+    const elements = document.querySelectorAll(elementsSelector);
+    elements.should.have.lengthOf.at.least(1);
+
+    for (const element of elements) {
+        element.firstElementChild.className.should.equal(SeriesInfoClass);
+    }
+}
+
+function assertSeriesInfoIsLastChildOf(document, elementsSelector) {
+    const elements = document.querySelectorAll(elementsSelector);
+    elements.should.have.lengthOf.at.least(1);
+
+    for (const element of elements) {
+        element.lastElementChild.className.should.equal(SeriesInfoClass);
+    }    
+}
+
+function assertSeriesInfoIsSiblingBefore(document, elementsSelector) {
+    const elements = document.querySelectorAll(elementsSelector);
+    elements.should.have.lengthOf.at.least(1);
+
+    for (const element of elements) {
+        element.previousElementSibling.className.should.equal(SeriesInfoClass);
+    }    
+}
+
+function assertSeriesInfoIsSiblingAfter(document, elementsSelector) {
+    const elements = document.querySelectorAll(elementsSelector);
+    elements.should.have.lengthOf.at.least(1);
+
+    for (const element of elements) {
+        element.nextElementSibling.className.should.equal(SeriesInfoClass);
+    }    
+}
+
 
 /**
  * Filters to the posts with all the specified tags (slugs).
