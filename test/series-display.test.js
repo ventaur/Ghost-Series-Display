@@ -13,7 +13,7 @@ import {
 import SeriesDisplay from '../lib/index.js';
 
 chai.use(chaiAsPromised);
-
+chai.should();
 
 const SeriesInfoClass = 'series-info';
 
