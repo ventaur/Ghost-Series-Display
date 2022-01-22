@@ -415,7 +415,7 @@ describe('SeriesDisplay', function () {
                 };
                 await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
 
-                assertSeriesInfoIsFirstChildOf(document, '.meta');
+                assertSeriesInfoIsFirstChild(document, '.meta', 1);
             });
 
             it('as last child', async function () {
@@ -433,7 +433,7 @@ describe('SeriesDisplay', function () {
                 };
                 await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
 
-                assertSeriesInfoIsLastChildOf(document, '.meta');
+                assertSeriesInfoIsLastChild(document, '.meta', 1);
             });
 
             it('as previous sibling', async function () {
@@ -451,7 +451,7 @@ describe('SeriesDisplay', function () {
                 };
                 await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
 
-                assertSeriesInfoIsSiblingBefore(document, '.meta');
+                assertSeriesInfoIsSiblingBefore(document, '.meta', 1);
             });
 
             it('as next sibling', async function () {
@@ -469,7 +469,7 @@ describe('SeriesDisplay', function () {
                 };
                 await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
 
-                assertSeriesInfoIsSiblingAfter(document, '.meta');
+                assertSeriesInfoIsSiblingAfter(document, '.meta', 1);
             });
         });
 
@@ -482,7 +482,7 @@ describe('SeriesDisplay', function () {
             };
             await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
 
-            assertSeriesInfoIsLastChildOf(document, 'main .post');
+            assertSeriesInfoIsLastChild(document, 'main .post', 1);
         });
 
         it('caches repeat API calls for same series tags', async function () {
@@ -577,36 +577,36 @@ function assertUrlsForAnchorHrefs(node, urls) {
     anchorHrefs.should.deep.equal(urls);
 }
 
-function assertSeriesInfoIsFirstChildOf(document, elementsSelector) {
+function assertSeriesInfoIsFirstChild(document, elementsSelector, expectedCount) {
     const elements = document.querySelectorAll(elementsSelector);
-    elements.should.have.lengthOf.at.least(1);
+    elements.should.have.lengthOf(expectedCount);
 
     for (const element of elements) {
         element.firstElementChild.className.should.equal(SeriesInfoClass);
     }
 }
 
-function assertSeriesInfoIsLastChildOf(document, elementsSelector) {
+function assertSeriesInfoIsLastChild(document, elementsSelector, expectedCount) {
     const elements = document.querySelectorAll(elementsSelector);
-    elements.should.have.lengthOf.at.least(1);
+    elements.should.have.lengthOf(expectedCount);
 
     for (const element of elements) {
         element.lastElementChild.className.should.equal(SeriesInfoClass);
     }    
 }
 
-function assertSeriesInfoIsSiblingBefore(document, elementsSelector) {
+function assertSeriesInfoIsSiblingBefore(document, elementsSelector, expectedCount) {
     const elements = document.querySelectorAll(elementsSelector);
-    elements.should.have.lengthOf.at.least(1);
+    elements.should.have.lengthOf(expectedCount);
 
     for (const element of elements) {
         element.previousElementSibling.className.should.equal(SeriesInfoClass);
     }    
 }
 
-function assertSeriesInfoIsSiblingAfter(document, elementsSelector) {
+function assertSeriesInfoIsSiblingAfter(document, elementsSelector, expectedCount) {
     const elements = document.querySelectorAll(elementsSelector);
-    elements.should.have.lengthOf.at.least(1);
+    elements.should.have.lengthOf(expectedCount);
 
     for (const element of elements) {
         element.nextElementSibling.className.should.equal(SeriesInfoClass);
