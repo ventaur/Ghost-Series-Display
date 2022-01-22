@@ -438,55 +438,55 @@ describe('SeriesDisplay', function () {
 
 
 function assertHeadingInAside(node, expectedCount) {
-    const headings = node.querySelectorAll(`aside.${SeriesInfoClass} > h1`);
+    const headings = node.querySelectorAll(`.${SeriesInfoClass} aside > h1`);
     headings.length.should.equal(expectedCount);
 }
 
 function assertTitleInHeading(node, tagNames) {
-    const headings = node.querySelectorAll(`aside.${SeriesInfoClass} > h1`);
+    const headings = node.querySelectorAll(`.${SeriesInfoClass} h1`);
     for (const [i, tag ] of tagNames.entries()) {
         headings[i].textContent.should.contain(`Other Posts in ${tag}`);
     }
 }
 
 function assertOrderedListInAside(node, expectedCount) {
-    const lists = node.querySelectorAll(`aside.${SeriesInfoClass} > ol`);
+    const lists = node.querySelectorAll(`.${SeriesInfoClass} aside > ol`);
     lists.length.should.equal(expectedCount);
 }
 
 function assertListItemsInOrderedList(node, expectedCount) {
-    const listItems = node.querySelectorAll(`aside.${SeriesInfoClass} > ol > li`);
+    const listItems = node.querySelectorAll(`.${SeriesInfoClass} ol > li`);
     listItems.length.should.equal(expectedCount);
 }
 
 function assertTextForListItems(node, texts) {
-    const listItems = node.querySelectorAll(`aside.${SeriesInfoClass} > ol > li`);
+    const listItems = node.querySelectorAll(`.${SeriesInfoClass} ol > li`);
     const listItemsText = [...listItems].map(item => item.textContent);
     listItemsText.should.deep.equal(texts);
 }
 
 function assertSameListItemTextTwice(fragment, repeatedText) {
-    const listItems = fragment.querySelectorAll(`aside.${SeriesInfoClass} > ol > li`);
+    const listItems = fragment.querySelectorAll(`.${SeriesInfoClass} ol > li`);
     const listItemsText = [...listItems].map(item => item.textContent);
     const textsForPostInBothSeries = listItemsText.filter(text => text === repeatedText);
     textsForPostInBothSeries.length.should.equal(2);
 }
 
 function assertAnchorsInListItems(node, expectedCount) {
-    const anchors = node.querySelectorAll(`aside.${SeriesInfoClass} > ol > li > a`);
+    const anchors = node.querySelectorAll(`.${SeriesInfoClass} ol > li > a`);
     anchors.length.should.equal(expectedCount);
 }
 
 function assertAnchorsInListItemsExcept(node, expectedCount, exceptionText) {
     assertAnchorsInListItems(node, expectedCount);
     
-    const listItems = node.querySelectorAll(`aside.${SeriesInfoClass} > ol > li`);
+    const listItems = node.querySelectorAll(`.${SeriesInfoClass} ol > li`);
     const listItemWithoutAnchors = [...listItems].filter(item => item.querySelector('a') === null);
     listItemWithoutAnchors.every(listItem => listItem.textContent.should.equal(exceptionText));
 }
 
 function assertUrlsForAnchorHrefs(node, urls) {
-    const anchors = node.querySelectorAll(`aside.${SeriesInfoClass} a`);
+    const anchors = node.querySelectorAll(`.${SeriesInfoClass} a`);
     const anchorHrefs = [...anchors].map(a => a.getAttribute('href'));
     anchorHrefs.should.deep.equal(urls);
 }
