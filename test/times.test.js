@@ -23,6 +23,12 @@ describe('#times', function () {
         actual.should.deep.equal(expected);
     });
 
+    it('returns single value if n is 1', function () {
+        const actual = times(1, answerToTheUniverse);
+        const expected = [ answerToTheUniverse() ];
+        actual.should.deep.equal(expected);
+    });
+
     it('returns an empty array if n is 0', function () {
         const actual = times(0, answerToTheUniverse);
         actual.should.be.empty;
