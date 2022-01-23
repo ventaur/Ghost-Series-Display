@@ -418,6 +418,24 @@ describe('SeriesDisplay', function () {
                 assertSeriesInfoIsFirstChild(document, '.meta', 1);
             });
 
+            it('as first child, multiple matches', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+                const options = {
+                    seriesTagSlugs: SeriesTagSlugFluffy,
+                    insertions: [
+                        {
+                            selector: '.navigator',
+                            position: ElementInsertionPosition.BEGIN
+                        }
+                    ]
+                };
+                await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+                assertSeriesInfoIsFirstChild(document, '.navigator', 2);
+            });
+
             it('as last child', async function () {
                 /** @type {Document} */
                 const { document } = parseHTML(BasicPostHtml);
@@ -434,6 +452,24 @@ describe('SeriesDisplay', function () {
                 await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
 
                 assertSeriesInfoIsLastChild(document, '.meta', 1);
+            });
+
+            it('as last child, multiple matches', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+                const options = {
+                    seriesTagSlugs: SeriesTagSlugFluffy,
+                    insertions: [
+                        {
+                            selector: '.navigator',
+                            position: ElementInsertionPosition.END
+                        }
+                    ]
+                };
+                await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+                assertSeriesInfoIsLastChild(document, '.navigator', 2);
             });
 
             it('as previous sibling', async function () {
@@ -454,6 +490,24 @@ describe('SeriesDisplay', function () {
                 assertSeriesInfoIsSiblingBefore(document, '.meta', 1);
             });
 
+            it('as previous sibling, multiple matches', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+                const options = {
+                    seriesTagSlugs: SeriesTagSlugFluffy,
+                    insertions: [
+                        {
+                            selector: '.navigator',
+                            position: ElementInsertionPosition.BEFORE
+                        }
+                    ]
+                };
+                await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+                assertSeriesInfoIsSiblingBefore(document, '.navigator', 2);
+            });
+
             it('as next sibling', async function () {
                 /** @type {Document} */
                 const { document } = parseHTML(BasicPostHtml);
@@ -470,6 +524,24 @@ describe('SeriesDisplay', function () {
                 await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
 
                 assertSeriesInfoIsSiblingAfter(document, '.meta', 1);
+            });
+            
+            it('as next sibling, multiple matches', async function () {
+                /** @type {Document} */
+                const { document } = parseHTML(BasicPostHtml);
+                /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+                const options = {
+                    seriesTagSlugs: SeriesTagSlugFluffy,
+                    insertions: [
+                        {
+                            selector: '.navigator',
+                            position: ElementInsertionPosition.AFTER
+                        }
+                    ]
+                };
+                await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+                assertSeriesInfoIsSiblingAfter(document, '.navigator', 2);
             });
         });
 
