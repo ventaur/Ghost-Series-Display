@@ -545,6 +545,29 @@ describe('SeriesDisplay', function () {
             });
         });
 
+        it('inserts relative to multiple selectors and matches', async function () {
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                insertions: [
+                    {
+                        selector: '.meta',
+                        position: ElementInsertionPosition.BEGIN
+                    },
+                    {
+                        selector: '.navigator',
+                        position: ElementInsertionPosition.AFTER
+                    }
+                ]
+            };
+            await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+            assertSeriesInfoIsFirstChild(document, '.meta', 1);
+            assertSeriesInfoIsSiblingAfter(document, '.navigator', 2);
+        });
+
         it('inserts by default at end of main post element', async function () {
             /** @type {Document} */
             const { document } = parseHTML(BasicPostHtml);
