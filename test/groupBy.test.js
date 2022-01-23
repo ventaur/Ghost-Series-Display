@@ -2,10 +2,10 @@ import chai from 'chai';
 
 import groupBy from '../lib/groupBy.js';
 
-const should = chai.should();
+chai.should();
 
 
-describe('groupBy', function () {
+describe('#groupBy', function () {
     it('returns a Map', function () {
         const result = groupBy([1, 2, 3], oddOrEven);
         result.should.be.an.instanceOf(Map);
