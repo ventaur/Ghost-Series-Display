@@ -632,20 +632,20 @@ describe('SeriesDisplay', function () {
 
             /** @type {Document} */
             const { document } = parseHTML('');
-            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
             const singleTagOptions = {
                 seriesTagSlugs: SeriesTagSlugFluffy
             };
-            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
             const bothTagsOptions = {
                 seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
             };
 
-            await seriesDisplay.buildSeriesInfoFragment(document, singleTagOptions);
-            await seriesDisplay.buildSeriesInfoFragment(document, singleTagOptions);
+            await seriesDisplay.displaySeriesInfo(document, singleTagOptions);
+            await seriesDisplay.displaySeriesInfo(document, singleTagOptions);
             api.posts.browse.callCount.should.equal(1);
 
-            await seriesDisplay.buildSeriesInfoFragment(document, bothTagsOptions);
+            await seriesDisplay.displaySeriesInfo(document, bothTagsOptions);
             api.posts.browse.callCount.should.equal(2);
         });
 
@@ -653,12 +653,73 @@ describe('SeriesDisplay', function () {
             const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
             const seriesDisplay = new SeriesDisplay(api);
 
-            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
             const options = {
                 seriesTagSlugs: SeriesTagSlugFluffy
             }
 
             await seriesDisplay.displaySeriesInfo(undefined, options).should.be.rejectedWith(TypeError, /document must be provided/);
+        });
+
+        it('throws if options.insertions is undefined or not an array', async function () {
+            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML('');
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+            const optionsMissingInsertions = {
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                insertions: undefined
+            }
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+            const optionsWithInvalidInsertions = {
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                insertions: 333
+            }
+
+            await seriesDisplay.displaySeriesInfo(document, optionsMissingInsertions).should.be.rejectedWith(TypeError, /insertions.*required/);
+            await seriesDisplay.displaySeriesInfo(document, optionsWithInvalidInsertions).should.be.rejectedWith(TypeError, /insertions.*array/);
+        });
+
+        it('throws if options.insertions.selector is invalid', async function () {
+            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML('');
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                insertions: [
+                    {
+                        selector: 555,
+                        position: ElementInsertionPosition.END
+                    }
+                ]
+            }
+
+            await seriesDisplay.displaySeriesInfo(document, options).should.be.rejected;
+        });
+
+        it('throws if options.insertions.position is invalid', async function () {
+            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                insertions: [
+                    {
+                        selector: 'div',
+                        position: 'wrong'
+                    }
+                ]
+            }
+
+            await seriesDisplay.displaySeriesInfo(document, options).should.be.rejected;
         });
     });
 });
