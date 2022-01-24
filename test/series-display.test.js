@@ -13,7 +13,7 @@ import {
 } from './testScenarios.js';
 
 chai.use(chaiAsPromised);
-chai.should();
+const should = chai.should();
 
 const SeriesInfoClass = 'series-info';
 
@@ -568,6 +568,34 @@ describe('SeriesDisplay', function () {
             assertSeriesInfoIsSiblingAfter(document, '.navigator', 2);
         });
 
+        it('inserts relative to multiple selectors and matches with overlap', async function () {
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                insertions: [
+                    {
+                        selector: '.meta',
+                        position: ElementInsertionPosition.BEGIN
+                    },
+                    {
+                        selector: '.navigator',
+                        position: ElementInsertionPosition.AFTER
+                    },
+                    {
+                        selector: 'main .post, .navigator',
+                        position: ElementInsertionPosition.AFTER
+                    }
+                ]
+            };
+            await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+            assertSeriesInfoIsFirstChild(document, '.meta', 1);
+            assertSeriesInfoIsSiblingAfter(document, '.navigator', 2, 2);
+            assertSeriesInfoIsSiblingAfter(document, 'main .post', 1);
+        });
+
         it('inserts by default at end of main post element', async function () {
             /** @type {Document} */
             const { document } = parseHTML(BasicPostHtml);
@@ -578,6 +606,24 @@ describe('SeriesDisplay', function () {
             await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
 
             assertSeriesInfoIsLastChild(document, 'main .post', 1);
+        });
+
+        it('explicit insertions do not include the default insert', async function () {
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                insertions: [
+                    {
+                        selector: '.meta',
+                        position: ElementInsertionPosition.BEGIN
+                    }
+                ]
+            };
+            await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
+
+            assertSeriesInfoIsNotChild(document, 'main .post');
         });
 
         it('caches repeat API calls for same series tags', async function () {
@@ -672,40 +718,67 @@ function assertUrlsForAnchorHrefs(node, urls) {
     anchorHrefs.should.deep.equal(urls);
 }
 
-function assertSeriesInfoIsFirstChild(document, elementsSelector, expectedCount) {
+function assertSeriesInfoIsFirstChild(document, elementsSelector, expectedCount, consecutiveCount = 1) {
     const elements = document.querySelectorAll(elementsSelector);
     elements.should.have.lengthOf(expectedCount);
 
     for (const element of elements) {
         element.firstElementChild.className.should.equal(SeriesInfoClass);
+        assertSeriesInfoAreConsecutiveSiblingsAfter(element.firstElementChild, consecutiveCount);
     }
 }
 
-function assertSeriesInfoIsLastChild(document, elementsSelector, expectedCount) {
+function assertSeriesInfoIsLastChild(document, elementsSelector, expectedCount, consecutiveCount = 1) {
     const elements = document.querySelectorAll(elementsSelector);
     elements.should.have.lengthOf(expectedCount);
 
     for (const element of elements) {
         element.lastElementChild.className.should.equal(SeriesInfoClass);
+        assertSeriesInfoAreConsecutiveSiblingsBefore(element.lastElementChild, consecutiveCount);
     }    
 }
 
-function assertSeriesInfoIsSiblingBefore(document, elementsSelector, expectedCount) {
+function assertSeriesInfoIsSiblingBefore(document, elementsSelector, expectedCount, consecutiveCount = 1) {
     const elements = document.querySelectorAll(elementsSelector);
     elements.should.have.lengthOf(expectedCount);
 
     for (const element of elements) {
         element.previousElementSibling.className.should.equal(SeriesInfoClass);
+        assertSeriesInfoAreConsecutiveSiblingsBefore(element.previousElementSibling, consecutiveCount);
     }    
 }
 
-function assertSeriesInfoIsSiblingAfter(document, elementsSelector, expectedCount) {
+function assertSeriesInfoIsSiblingAfter(document, elementsSelector, expectedCount, consecutiveCount = 1) {
     const elements = document.querySelectorAll(elementsSelector);
     elements.should.have.lengthOf(expectedCount);
 
     for (const element of elements) {
         element.nextElementSibling.className.should.equal(SeriesInfoClass);
+        assertSeriesInfoAreConsecutiveSiblingsAfter(element.nextElementSibling, consecutiveCount);
     }    
+}
+
+function assertSeriesInfoIsNotChild(document, elementsSelector) {
+    const elements = document.querySelectorAll(elementsSelector);
+    elements.should.have.lengthOf.at.least(1);
+
+    for (const element of elements) {
+        should.not.exist(element.querySelector(`.${SeriesInfoClass}`));
+    }
+}
+
+function assertSeriesInfoAreConsecutiveSiblingsBefore(element, consecutiveCount) {
+    for (let i = 1; i < consecutiveCount; i++) {
+        element = element.previousElementSibling;
+        element.className.should.equal(SeriesInfoClass);
+    }
+}
+
+function assertSeriesInfoAreConsecutiveSiblingsAfter(element, consecutiveCount) {
+    for (let i = 1; i < consecutiveCount; i++) {
+        element = element.nextElementSibling;
+        element.className.should.equal(SeriesInfoClass);
+    }
 }
 
 
