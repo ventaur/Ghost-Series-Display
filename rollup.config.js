@@ -21,9 +21,7 @@ const config = [
         input: pkg.source,
         output: {
             file: pkg.main,
-            exports: 'default',
             format: 'cjs',
-            interop: false
         },
         plugins: [
             commonjs({

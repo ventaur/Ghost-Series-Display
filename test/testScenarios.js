@@ -2,7 +2,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { loadJsonFile } from 'load-json-file';
 import { loadTextFile } from 'load-text-file';
 
-import SeriesDisplay from '../lib/index.js';
+import { SeriesDisplay } from '../lib/index.js';
 
 
 export const SeriesTagSlugDecDaily = 'series-december-daily-2021';

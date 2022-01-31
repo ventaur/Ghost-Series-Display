@@ -3,7 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import { parseHTML } from 'linkedom';
 import sinon from 'sinon';
 
-import SeriesDisplay, { ElementInsertionPosition } from '../lib/index.js';
+import { SeriesDisplay, ElementInsertionPosition } from '../lib/index.js';
 
 import {
     SeriesTagSlugDecDaily, SeriesTagSlugFluffy, 
