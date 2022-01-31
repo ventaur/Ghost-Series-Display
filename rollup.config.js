@@ -11,7 +11,10 @@ import pkg from './package.json';
 const dependencies = Object.keys(pkg.dependencies);
 
 
-export default [
+/**
+ * @type {Array<import('rollup').RollupOptions>}
+ */
+const config = [
     // Node build
     // No transpilation or bundling other than conversion from ES modules to CJS.
     {
@@ -35,11 +38,11 @@ export default [
     // bundles all necessary dependencies and polyfills.
     {
         input: pkg.source,
-        output: [{
+        output: {
             file: pkg.module,
             format: 'es',
             sourcemap: true
-        }],
+        },
         plugins: [
             resolve({
                 browser: true
@@ -71,13 +74,22 @@ export default [
     // bundles all dependencies and polyfills.
     {
         input: pkg.source,
-        output: {
-            file: pkg['umd:main'],
-            format: 'umd',
-            name: 'GhostSeriesDisplay',
-            sourcemap: true,
-            plugins: [terser()]
-        },
+        output: [
+            {
+                file: pkg.unpkg,
+                format: 'umd',
+                name: 'GhostSeriesDisplay',
+                sourcemap: true,
+                plugins: []
+            },
+            {
+                file: pkg.umd,
+                format: 'umd',
+                name: 'GhostSeriesDisplay',
+                sourcemap: true,
+                plugins: [terser()]
+            }
+        ],
         plugins: [
             resolve({
                 browser: true
@@ -104,3 +116,5 @@ export default [
         ]
     }
 ];
+
+export default config;

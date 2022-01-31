@@ -10,8 +10,8 @@
   "author": "Ventaur",
   "license": "ISC",
   "main": "dist/cjs/series-display.js",
-  "umd:main": "dist/umd/series-display.min.js",
-  "unpkg": "dist/umd/series-display.min.js",
+  "umd": "dist/umd/series-display.min.js",
+  "unpkg": "dist/umd/series-display.js",
   "module": "dist/es/series-display.js",
   "source": "lib/index.js",
   "type": "module",
@@ -29,7 +29,7 @@
     "posttest": "npm run lint",
     "build": "rollup -c",
     "lint": "eslint . --ext .js --cache",
-    "prepare": "NODE_ENV=production npm build"
+    "prepare": "NODE_ENV=production npm run build"
   },
   "devDependencies": {
     "@babel/core": "^7.16.5",
