@@ -8,7 +8,7 @@ import "core-js/stable";
 import pkg from './package.json';
 
 
-const dependencies = Object.keys(pkg.dependencies);
+const dependencies = Object.keys(pkg.dependencies ?? []);
 
 
 /**
