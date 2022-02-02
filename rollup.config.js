@@ -32,7 +32,7 @@ const config = [
     },
 
     // ES module build
-    // Transpiles to ES version supported by preset-env's default browsers list and
+    // Transpiles to ES version supported by preset-env's specified browsers list and
     // bundles all necessary dependencies and polyfills.
     {
         input: pkg.source,
@@ -52,8 +52,7 @@ const config = [
                 babelHelpers: 'bundled',
                 presets: [
                     ['@babel/preset-env', {
-                        modules: false,
-                        targets: '> 0.25%, last 2 versions, not dead, not IE 11',
+                        modules: 'auto',
                         useBuiltIns: 'usage',
                         corejs: '3.80'
                     }]
@@ -68,7 +67,7 @@ const config = [
     },
 
     // Standalone UMD browser build (minified)
-    // Transpiles to es version supported by preset-env's default browsers list and
+    // Transpiles to es version supported by preset-env's specified browsers list and
     // bundles all dependencies and polyfills.
     {
         input: pkg.source,
@@ -100,7 +99,6 @@ const config = [
                 presets: [
                     ['@babel/preset-env', {
                         modules: 'auto',
-                        targets: '> 0.25%, last 2 versions, not dead, not IE 11',
                         useBuiltIns: 'usage',
                         corejs: '3.80'
                     }]
