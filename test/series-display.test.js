@@ -244,7 +244,8 @@ describe('SeriesDisplay', function () {
             const { document } = parseHTML(BasicPostHtml);
 
             await seriesDisplay.buildSeriesInfoFragment(document);
-            browse.firstArg.filter.should.equal('tag:series-buying-new-house+tag:series-surveying-land');
+            browse.firstArg.filter.should.contains('tag:series-buying-new-house');
+            browse.firstArg.filter.should.contains('tag:series-surveying-land');
         });
 
         it('does not call API endpoint if not in a series', async function () {
@@ -765,8 +766,9 @@ describe('SeriesDisplay', function () {
             /** @type {Document} */
             const { document } = parseHTML(BasicPostHtml);
 
-            await seriesDisplay.buildSeriesInfoFragment(document);
-            browse.firstArg.filter.should.equal('tag:series-buying-new-house+tag:series-surveying-land');
+            await seriesDisplay.displaySeriesInfo(document);
+            browse.firstArg.filter.should.contains('tag:series-buying-new-house');
+            browse.firstArg.filter.should.contains('tag:series-surveying-land');
         });
 
         it('does not call API endpoint if not in a series', async function () {
