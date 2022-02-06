@@ -45,9 +45,7 @@ All 3 values are near the end of the script.
         function loadSeriesDisplay(document, src, api) {
             return new Promise((resolve, reject) => {
                 var script = document.createElement('script');
-                script.onload = resolve({
-                    then: (resolve) => resolve(new GhostSeriesDisplay.SeriesDisplay(api));
-                });
+                script.onload = () => resolve(new GhostSeriesDisplay.SeriesDisplay(api));
                 script.onerror = reject;
                 script.async = true;
                 script.src = src;
@@ -60,10 +58,10 @@ All 3 values are near the end of the script.
                 // Minimum needed to display series info.
                 seriesDisplay.displaySeriesInfo(document);
             });
-    )(
+    })(
         '/assets/js/ghost-series-display.min.js',              // location to the series display script
         '0123456789abcdef0123456789',                          // your Ghost Content API key
-        `${window.location.protocol}//${window.location.host}` // URL to your Ghost site
+        `${window.location.protocol}//${window.location.host}` // URL to your Ghost Admin site
     );
 </script>
 ```
