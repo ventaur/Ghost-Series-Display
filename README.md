@@ -31,8 +31,10 @@ Doing so will only affect that specific theme.
 ### Integration Script Examples
 Our first example is the most basic to get things running. 
 It requires you to verify (or chnage) the location of the Series Display script file 
-you copied to your server and your Ghost Content API key.
-Both values are near the end of the script.
+you copied to your server and your generated Ghost Content API key. 
+Additionally, if your Admin site is separate from your content site, you will need to 
+update code with the that URL (e.g., `https://admin.mysite.com`).
+All 3 values are near the end of the script.
 
 ```js
 <script>
