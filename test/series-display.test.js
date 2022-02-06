@@ -201,7 +201,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('caches repeat API calls for same series tags', async function () {
-            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type {Document} */
@@ -224,7 +224,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('throws if document is undefined', async function () {
-            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type import('../lib/index.js').BuildSeriesInfoOptions */
@@ -236,7 +236,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('finds series tag slugs from body if undefined', async function () {
-            const browse = sinon.fake.returns({ posts: fluffyPosts});
+            const browse = sinon.fake.returns(fluffyPosts);
             const api = { posts: { browse: browse }};
             const seriesDisplay = new SeriesDisplay(api);
 
@@ -248,7 +248,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('does not call API endpoint if not in a series', async function () {
-            const browse = sinon.fake.returns({ posts: fluffyPosts});
+            const browse = sinon.fake.returns(fluffyPosts);
             const api = { posts: { browse: browse }};
             const seriesDisplay = new SeriesDisplay(api);
 
@@ -260,7 +260,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('returns null if not in a series', async function () {
-            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type {Document} */
@@ -662,7 +662,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('caches repeat API calls for same series tags', async function () {
-            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type {Document} */
@@ -685,7 +685,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('throws if document is undefined', async function () {
-            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
@@ -697,7 +697,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('throws if options.insertions is undefined or not an array', async function () {
-            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type {Document} */
@@ -718,7 +718,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('throws if options.insertions.selector is invalid', async function () {
-            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type {Document} */
@@ -738,7 +738,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('throws if options.insertions.position is invalid', async function () {
-            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type {Document} */
@@ -758,7 +758,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('finds series tag slugs from body if undefined', async function () {
-            const browse = sinon.fake.returns({ posts: fluffyPosts});
+            const browse = sinon.fake.returns(fluffyPosts);
             const api = { posts: { browse: browse }};
             const seriesDisplay = new SeriesDisplay(api);
 
@@ -770,7 +770,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('does not call API endpoint if not in a series', async function () {
-            const browse = sinon.fake.returns({ posts: fluffyPosts});
+            const browse = sinon.fake.returns(fluffyPosts);
             const api = { posts: { browse: browse }};
             const seriesDisplay = new SeriesDisplay(api);
 
@@ -782,7 +782,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('does not display if not in a series', async function () {
-            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type {Document} */

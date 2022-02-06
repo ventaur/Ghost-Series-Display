@@ -48,7 +48,7 @@ function addTagToPosts(tagSlug, posts, postIndeces) {
  * @returns {import('../lib/index.js').GhostContentAPI} A fake Ghost Content API.
  */
 function createApi(posts) {
-    return { posts: { browse: async () => ({ posts }) } };
+    return { posts: { browse: async () => posts } };
 }
 
 /**
