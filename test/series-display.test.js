@@ -640,7 +640,7 @@ describe('SeriesDisplay', function () {
             };
             await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
 
-            assertSeriesInfoIsLastChild(document, 'main .post', 1);
+            assertSeriesInfoIsLastChild(document, 'main .post .gh-content', 1);
         });
 
         it('explicit insertions do not include the default insert', async function () {
@@ -797,12 +797,12 @@ describe('SeriesDisplay', function () {
 
 
 function assertHeadingInAside(node, expectedCount) {
-    const headings = node.querySelectorAll(`.${SeriesInfoClass} aside > h1`);
+    const headings = node.querySelectorAll(`.${SeriesInfoClass} aside > h2`);
     headings.should.have.lengthOf(expectedCount);
 }
 
 function assertTitleInHeading(node, tagNames) {
-    const headings = node.querySelectorAll(`.${SeriesInfoClass} h1`);
+    const headings = node.querySelectorAll(`.${SeriesInfoClass} h2`);
     for (const [i, tag ] of tagNames.entries()) {
         headings[i].textContent.should.contain(`Other Posts in ${tag}`);
     }
