@@ -43,7 +43,7 @@ or it is included in your theme, you do not need to include the first line.*
 <script src="https://unpkg.com/@tryghost/content-api@1.6.0/umd/content-api.min.js"></script>
 <script>
     // Series Display
-    (function(src, apiKey, apiUrl) {
+    (function(document, src, apiKey, apiUrl) {
         var api = new GhostContentAPI({ url: apiUrl, key: apiKey, version: 'v4' });
         
         function loadSeriesDisplay(document, src, api) {
@@ -63,6 +63,7 @@ or it is included in your theme, you do not need to include the first line.*
                 seriesDisplay.displaySeriesInfo(document);
             });
     })(
+        window.document, 
         '/assets/js/ghost-series-display.min.js',              // location to the series display script
         '0123456789abcdef0123456789',                          // your Ghost Content API key
         `${window.location.protocol}//${window.location.host}` // URL to your Ghost Admin site
