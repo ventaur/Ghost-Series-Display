@@ -235,7 +235,7 @@ describe('SeriesDisplay', function () {
             await seriesDisplay.buildSeriesInfoFragment(undefined, options).should.be.rejectedWith(TypeError, /document must be provided/);
         });
 
-        it('finds public series tag slugs from body if undefined', async function () {
+        it('finds series tag slugs from body if undefined', async function () {
             const browse = sinon.fake.returns(fluffyPosts);
             const api = { posts: { browse: browse }};
             const seriesDisplay = new SeriesDisplay(api);
@@ -244,20 +244,7 @@ describe('SeriesDisplay', function () {
             const { document } = parseHTML(BasicPostHtml);
 
             await seriesDisplay.buildSeriesInfoFragment(document);
-            browse.firstArg.filter.should.contain('tag:series-buying-new-house');
-            browse.firstArg.filter.should.contain('tag:series-surveying-land');
-        });
-
-        it('finds private series tag slugs from body if undefined', async function () {
-            const browse = sinon.fake.returns(fluffyPosts);
-            const api = { posts: { browse: browse }};
-            const seriesDisplay = new SeriesDisplay(api);
-
-            /** @type {Document} */
-            const { document } = parseHTML(BasicPostHtml);
-
-            await seriesDisplay.buildSeriesInfoFragment(document);
-            browse.firstArg.filter.should.contain('tag:hash-series-real-estate');
+            browse.firstArg.filter.should.equal('tag:series-buying-new-house+tag:series-surveying-land');
         });
 
         it('does not call API endpoint if not in a series', async function () {
@@ -770,7 +757,7 @@ describe('SeriesDisplay', function () {
             await seriesDisplay.displaySeriesInfo(document, options).should.be.rejected;
         });
 
-        it('finds public series tag slugs from body if undefined', async function () {
+        it('finds series tag slugs from body if undefined', async function () {
             const browse = sinon.fake.returns(fluffyPosts);
             const api = { posts: { browse: browse }};
             const seriesDisplay = new SeriesDisplay(api);
@@ -778,23 +765,9 @@ describe('SeriesDisplay', function () {
             /** @type {Document} */
             const { document } = parseHTML(BasicPostHtml);
 
-            await seriesDisplay.displaySeriesInfo(document);
-            browse.firstArg.filter.should.contain('tag:series-buying-new-house');
-            browse.firstArg.filter.should.contain('tag:series-surveying-land');
+            await seriesDisplay.buildSeriesInfoFragment(document);
+            browse.firstArg.filter.should.equal('tag:series-buying-new-house+tag:series-surveying-land');
         });
-
-        it('finds private series tag slugs from body if undefined', async function () {
-            const browse = sinon.fake.returns(fluffyPosts);
-            const api = { posts: { browse: browse }};
-            const seriesDisplay = new SeriesDisplay(api);
-
-            /** @type {Document} */
-            const { document } = parseHTML(BasicPostHtml);
-
-            await seriesDisplay.displaySeriesInfo(document);
-            browse.firstArg.filter.should.contain('tag:hash-series-real-estate');
-        });
-
 
         it('does not call API endpoint if not in a series', async function () {
             const browse = sinon.fake.returns(fluffyPosts);
