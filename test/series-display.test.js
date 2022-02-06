@@ -258,6 +258,18 @@ describe('SeriesDisplay', function () {
             await seriesDisplay.buildSeriesInfoFragment(document);
             browse.called.should.be.false;
         });
+
+        it('returns null if not in a series', async function () {
+            const browse = sinon.fake.returns({ posts: fluffyPosts});
+            const api = { posts: { browse: browse }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(NonSeriesPostHtml);
+
+            const fragment = await seriesDisplay.buildSeriesInfoFragment(document);
+            should.equal(fragment, null);
+        });
     });
 
     describe('#displaySeriesInfo', function () {
