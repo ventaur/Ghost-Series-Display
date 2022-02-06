@@ -781,6 +781,19 @@ describe('SeriesDisplay', function () {
             await seriesDisplay.displaySeriesInfo(document);
             browse.called.should.be.false;
         });
+
+        it('does not display if not in a series', async function () {
+            const browse = sinon.fake.returns({ posts: fluffyPosts});
+            const api = { posts: { browse: browse }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(NonSeriesPostHtml);
+
+            await seriesDisplay.displaySeriesInfo(document);
+            assertSeriesInfoIsNotChild(document, 'body');
+            document.body.innerText.should.not.contain('null');
+        });
     });
 });
 
