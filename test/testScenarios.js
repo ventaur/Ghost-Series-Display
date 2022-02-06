@@ -42,6 +42,21 @@ function addTagToPosts(tagSlug, posts, postIndeces) {
     }
 }
 
+function addMetadataToPosts(posts) {
+    let pagination = {
+        page: 1,
+        limit: 15,
+        pages: undefined,
+        total: posts.length,
+        next: null
+    };
+    pagination.pages = Math.ceil(posts.length / pagination.limit);
+
+    posts.meta = {
+        pagination
+    };
+}
+
 /**
  * 
  * @param {Array<Object>} posts An array of post objects to be returned by this fake API's posts.browse "endpoint".
@@ -77,6 +92,7 @@ export function createSeriesDisplayWithFluffyPosts() {
     const fluffyPosts = TestPosts.slice(4);
     const posts = mapPostProperties(cloneDeep(fluffyPosts));
     addTagToPosts(SeriesTagSlugFluffy, posts);
+    addMetadataToPosts(posts);
     
     const api = createApi(posts);
     return {
@@ -94,6 +110,7 @@ export function createSeriesDisplayWithFluffyPosts() {
     const posts = mapPostProperties(cloneDeep(TestPosts));
     addTagToPosts(SeriesTagSlugDecDaily, posts, [0, 1, 2, 3, 10]);
     addTagToPosts(SeriesTagSlugFluffy, posts, [4, 5, 6, 7, 8, 9, 10, 11]);
+    addMetadataToPosts(posts);
     
     const api = createApi(posts);
     return {
