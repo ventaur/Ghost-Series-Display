@@ -36,7 +36,11 @@ Additionally, if your Admin site is separate from your content site, you will ne
 update code with the that URL (e.g., `https://admin.mysite.com`).
 All 3 values are near the end of the script.
 
+*Note: If you already included a reference to the Ghost Content API script before, 
+or it is included in your theme, you do not need to include the first line.*
+
 ```js
+<script src="https://unpkg.com/@tryghost/content-api@1.6.0/umd/content-api.min.js"></script>
 <script>
     // Series Display
     (function(src, apiKey, apiUrl) {
