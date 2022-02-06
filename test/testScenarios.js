@@ -15,6 +15,8 @@ const TestPosts = await loadJsonFile('./test/test-posts.json'); // 12 posts
 
 /** @type string */
 export const BasicPostHtml = await loadTextFile('./test/post-basic.html');
+/** @type string */
+export const NonSeriesPostHtml = await loadTextFile('./test/post-non-series.html');
 
 
 /**

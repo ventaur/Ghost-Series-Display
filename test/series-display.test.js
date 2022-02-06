@@ -7,7 +7,7 @@ import { SeriesDisplay, ElementInsertionPosition } from '../lib/index.js';
 
 import {
     SeriesTagSlugDecDaily, SeriesTagSlugFluffy, 
-    TagsBySlug, BasicPostHtml,
+    TagsBySlug, BasicPostHtml, NonSeriesPostHtml, 
     createSeriesDisplayWithFluffyPosts,
     createSeriesDisplayWithDecDailyAndFluffyPosts
 } from './testScenarios.js';
@@ -245,6 +245,18 @@ describe('SeriesDisplay', function () {
 
             await seriesDisplay.buildSeriesInfoFragment(document);
             browse.firstArg.filter.should.equal('tag:series-buying-new-house+tag:series-surveying-land');
+        });
+
+        it('does not call API endpoint if not in a series', async function () {
+            const browse = sinon.fake.returns({ posts: fluffyPosts});
+            const api = { posts: { browse: browse }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(NonSeriesPostHtml);
+
+            await seriesDisplay.buildSeriesInfoFragment(document);
+            browse.called.should.be.false;
         });
     });
 
@@ -744,6 +756,18 @@ describe('SeriesDisplay', function () {
 
             await seriesDisplay.buildSeriesInfoFragment(document);
             browse.firstArg.filter.should.equal('tag:series-buying-new-house+tag:series-surveying-land');
+        });
+
+        it('does not call API endpoint if not in a series', async function () {
+            const browse = sinon.fake.returns({ posts: fluffyPosts});
+            const api = { posts: { browse: browse }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(NonSeriesPostHtml);
+
+            await seriesDisplay.buildSeriesInfoFragment(document);
+            browse.called.should.be.false;
         });
     });
 });
