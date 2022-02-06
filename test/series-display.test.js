@@ -260,8 +260,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('returns null if not in a series', async function () {
-            const browse = sinon.fake.returns({ posts: fluffyPosts});
-            const api = { posts: { browse: browse }};
+            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type {Document} */
@@ -783,8 +782,7 @@ describe('SeriesDisplay', function () {
         });
 
         it('does not display if not in a series', async function () {
-            const browse = sinon.fake.returns({ posts: fluffyPosts});
-            const api = { posts: { browse: browse }};
+            const api = { posts: { browse: sinon.fake.returns({ posts: fluffyPosts}) }};
             const seriesDisplay = new SeriesDisplay(api);
 
             /** @type {Document} */
