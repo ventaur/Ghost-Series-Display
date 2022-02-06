@@ -766,7 +766,7 @@ describe('SeriesDisplay', function () {
             /** @type {Document} */
             const { document } = parseHTML(NonSeriesPostHtml);
 
-            await seriesDisplay.buildSeriesInfoFragment(document);
+            await seriesDisplay.displaySeriesInfo(document);
             browse.called.should.be.false;
         });
     });
