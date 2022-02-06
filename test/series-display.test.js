@@ -200,6 +200,21 @@ describe('SeriesDisplay', function () {
             });
         });
 
+        it('queries API with OR operator for multiple series tags', async function () {
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML('');
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
+            };
+
+            await seriesDisplay.buildSeriesInfoFragment(document, options);
+            api.posts.browse.firstArg.filter.should.equal(`tag:${SeriesTagSlugDecDaily},tag:${SeriesTagSlugFluffy}`)
+        });
+
         it('caches repeat API calls for same series tags', async function () {
             const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
@@ -660,6 +675,21 @@ describe('SeriesDisplay', function () {
             await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
 
             assertSeriesInfoIsNotChild(document, 'main .post');
+        });
+
+        it('queries API with OR operator for multiple series tags', async function () {
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML('');
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
+            };
+
+            await seriesDisplay.displaySeriesInfo(document, options);
+            api.posts.browse.firstArg.filter.should.equal(`tag:${SeriesTagSlugDecDaily},tag:${SeriesTagSlugFluffy}`)
         });
 
         it('caches repeat API calls for same series tags', async function () {
