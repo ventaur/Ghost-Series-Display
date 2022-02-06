@@ -14,7 +14,7 @@ export const TagsBySlug = await loadJsonFile('./test/test-tags.json');
 const TestPosts = await loadJsonFile('./test/test-posts.json'); // 12 posts
 
 /** @type string */
-export const BasicPostHtml = await loadTextFile('./test/basic-post.html');
+export const BasicPostHtml = await loadTextFile('./test/post-basic.html');
 
 
 /**
