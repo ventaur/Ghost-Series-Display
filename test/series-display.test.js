@@ -234,6 +234,18 @@ describe('SeriesDisplay', function () {
 
             await seriesDisplay.buildSeriesInfoFragment(undefined, options).should.be.rejectedWith(TypeError, /document must be provided/);
         });
+
+        it('finds series tag slugs from body if undefined', async function () {
+            const browse = sinon.fake.returns({ posts: fluffyPosts});
+            const api = { posts: { browse: browse }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+
+            await seriesDisplay.buildSeriesInfoFragment(document);
+            browse.firstArg.filter.should.equal('tag:series-buying-new-house+tag:series-surveying-land');
+        });
     });
 
     describe('#displaySeriesInfo', function () {
@@ -720,6 +732,18 @@ describe('SeriesDisplay', function () {
             }
 
             await seriesDisplay.displaySeriesInfo(document, options).should.be.rejected;
+        });
+
+        it('finds series tag slugs from body if undefined', async function () {
+            const browse = sinon.fake.returns({ posts: fluffyPosts});
+            const api = { posts: { browse: browse }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+
+            await seriesDisplay.buildSeriesInfoFragment(document);
+            browse.firstArg.filter.should.equal('tag:series-buying-new-house+tag:series-surveying-land');
         });
     });
 });
