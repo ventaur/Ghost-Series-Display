@@ -307,6 +307,26 @@ describe('SeriesDisplay', function () {
             const fragment = await seriesDisplay.buildSeriesInfoFragment(document);
             should.equal(fragment, null);
         });
+        
+        it('contains empty section if only one in a series with option to hide', async function () {
+            const seriesPosts = [ fluffyPosts[0] ];
+            const currentPost = seriesPosts[0];
+            
+            const api = { posts: { browse: sinon.fake.returns(seriesPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                currentPostUrl: currentPost.url,
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                hideSinglePostSeries: true 
+            }
+
+            const fragment = await seriesDisplay.buildSeriesInfoFragment(document, options);
+            assertAsideInSection(fragment, 0);
+        });
     });
 
     describe('#displaySeriesInfo', function () {
@@ -868,9 +888,34 @@ describe('SeriesDisplay', function () {
             assertSeriesInfoIsNotChild(document, 'body');
             document.body.innerText.should.not.contain('null');
         });
+
+        it('insert empty section if only one in a series with option to hide', async function () {
+            const seriesPosts = [ fluffyPosts[0] ];
+            const currentPost = seriesPosts[0];
+            
+            const api = { posts: { browse: sinon.fake.returns(seriesPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                currentPostUrl: currentPost.url,
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                hideSinglePostSeries: true 
+            }
+
+            await seriesDisplay.displaySeriesInfo(document, options);
+            assertAsideInSection(document, 0);
+        });
     });
 });
 
+
+function assertAsideInSection(node, expectedCount) {
+    const asides = node.querySelectorAll(`.${SeriesInfoClass} aside`);
+    asides.should.have.lengthOf(expectedCount);
+}
 
 function assertHeadingInAside(node, expectedCount) {
     const headings = node.querySelectorAll(`.${SeriesInfoClass} aside > h2`);
