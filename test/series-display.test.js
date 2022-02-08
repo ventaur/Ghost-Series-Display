@@ -341,7 +341,7 @@ describe('SeriesDisplay', function () {
             const options = {
                 currentPostUrl: currentPost.url,
                 seriesTagSlugs: SeriesTagSlugFluffy,
-                hideWhenOnlyOneInSeries: false
+                hideSinglePostSeries: false
             }
 
             let fragment = await seriesDisplay.buildSeriesInfoFragment(document, options);
@@ -947,7 +947,7 @@ describe('SeriesDisplay', function () {
             const options = {
                 currentPostUrl: currentPost.url,
                 seriesTagSlugs: SeriesTagSlugFluffy,
-                hideWhenOnlyOneInSeries: false
+                hideSinglePostSeries: false
             }
 
             await seriesDisplay.displaySeriesInfo(document, options);
