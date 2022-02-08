@@ -250,6 +250,28 @@ describe('SeriesDisplay', function () {
             await seriesDisplay.buildSeriesInfoFragment(undefined, options).should.be.rejectedWith(TypeError, /document must be provided/);
         });
 
+        it('uses document location URL if none for post is specified', async function () {
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            const seriesPosts = fluffyPosts;
+            const currentPost = seriesPosts[1];
+
+            /** @type {Document} */
+            const { document } = parseHTML('');
+            document.location = {
+                origin: 'https://not-a-real-site.io',
+                pathname: `/${currentPost.slug}/`
+            };
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy
+            }
+
+            const fragment = await seriesDisplay.buildSeriesInfoFragment(document, options);
+            assertAnchorsInListItemsExcept(fragment, seriesPosts.length - 1, currentPost.title);
+        });
+
         it('finds series tag slugs from body if undefined', async function () {
             const browse = sinon.fake.returns(fluffyPosts);
             const api = { posts: { browse: browse }};
@@ -786,6 +808,28 @@ describe('SeriesDisplay', function () {
             }
 
             await seriesDisplay.displaySeriesInfo(document, options).should.be.rejected;
+        });
+
+        it('uses document location URL if none for post is specified', async function () {
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            const seriesPosts = fluffyPosts;
+            const currentPost = seriesPosts[1];
+
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+            document.location = {
+                origin: 'https://not-a-real-site.io',
+                pathname: `/${currentPost.slug}/`
+            };
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy
+            }
+
+            await seriesDisplay.displaySeriesInfo(document, options);
+            assertAnchorsInListItemsExcept(document, seriesPosts.length - 1, currentPost.title);
         });
 
         it('finds series tag slugs from body if undefined', async function () {
