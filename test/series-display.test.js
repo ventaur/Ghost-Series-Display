@@ -52,7 +52,7 @@ describe('SeriesDisplay', function () {
                 const { document } = parseHTML('');
                 /** @type import('../lib/index.js').BuildSeriesInfoOptions */
                 const options = {
-                    currentPostId: currentPost.id,
+                    currentPostUrl: currentPost.url,
                     seriesTagSlugs: SeriesTagSlugFluffy
                 };
                 fragment = await seriesDisplayForFluffyPosts.buildSeriesInfoFragment(document, options);
@@ -129,7 +129,7 @@ describe('SeriesDisplay', function () {
                 const { document } = parseHTML('');
                 /** @type import('../lib/index.js').BuildSeriesInfoOptions */
                 const options = {
-                    currentPostId: currentPost.id,
+                    currentPostUrl: currentPost.url,
                     seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
                 };
                 fragment = await seriesDisplayForDecDailyAndFluffyPosts.buildSeriesInfoFragment(document, options);
@@ -172,7 +172,7 @@ describe('SeriesDisplay', function () {
                 const { document } = parseHTML('');
                 /** @type import('../lib/index.js').BuildSeriesInfoOptions */
                 const options = {
-                    currentPostId: postInBothSeries.id,
+                    currentPostUrl: postInBothSeries.url,
                     seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
                 };
                 const fragment = await seriesDisplayForDecDailyAndFluffyPosts.buildSeriesInfoFragment(document, options);
@@ -303,7 +303,7 @@ describe('SeriesDisplay', function () {
                 ({ document } = parseHTML(BasicPostHtml));
                 /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
                 const options = {
-                    currentPostId: currentPost.id,
+                    currentPostUrl: currentPost.url,
                     seriesTagSlugs: SeriesTagSlugFluffy
                 };
                 await seriesDisplayForFluffyPosts.displaySeriesInfo(document, options);
@@ -379,7 +379,7 @@ describe('SeriesDisplay', function () {
                 ({ document } = parseHTML(BasicPostHtml));
                 /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
                 const options = {
-                    currentPostId: currentPost.id,
+                    currentPostUrl: currentPost.url,
                     seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
                 };
                 await seriesDisplayForDecDailyAndFluffyPosts.displaySeriesInfo(document, options);
@@ -422,7 +422,7 @@ describe('SeriesDisplay', function () {
                 const { document } = parseHTML(BasicPostHtml);
                 /** @type import('../lib/index.js').DisplaySeriesInfoOptions */
                 const options = {
-                    currentPostId: postInBothSeries.id,
+                    currentPostUrl: postInBothSeries.url,
                     seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ]
                 };
                 await seriesDisplayForDecDailyAndFluffyPosts.displaySeriesInfo(document, options);
