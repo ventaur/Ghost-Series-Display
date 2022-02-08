@@ -327,6 +327,31 @@ describe('SeriesDisplay', function () {
             const fragment = await seriesDisplay.buildSeriesInfoFragment(document, options);
             assertAsideInSection(fragment, 0);
         });
+
+        it('contains coming soon text if only one in a series without hiding', async function () {
+            const seriesPosts = [ fluffyPosts[0] ];
+            const currentPost = seriesPosts[0];
+            
+            const api = { posts: { browse: sinon.fake.returns(seriesPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                currentPostUrl: currentPost.url,
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                hideWhenOnlyOneInSeries: false
+            }
+
+            let fragment = await seriesDisplay.buildSeriesInfoFragment(document, options);
+            assertTextForListItems(fragment, [ currentPost.title, 'Coming soon…' ]);
+            
+            options.comingSoonText = 'More to come!';
+            fragment = await seriesDisplay.buildSeriesInfoFragment(document, options);
+            assertTextForListItems(fragment, [ currentPost.title, options.comingSoonText ]);
+
+        });
     });
 
     describe('#displaySeriesInfo', function () {
@@ -907,6 +932,32 @@ describe('SeriesDisplay', function () {
 
             await seriesDisplay.displaySeriesInfo(document, options);
             assertAsideInSection(document, 0);
+        });
+
+        it('inserts coming soon text if only one in a series without hiding', async function () {
+            const seriesPosts = [ fluffyPosts[0] ];
+            const currentPost = seriesPosts[0];
+            
+            const api = { posts: { browse: sinon.fake.returns(seriesPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            let { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                currentPostUrl: currentPost.url,
+                seriesTagSlugs: SeriesTagSlugFluffy,
+                hideWhenOnlyOneInSeries: false
+            }
+
+            await seriesDisplay.displaySeriesInfo(document, options);
+            assertTextForListItems(document, [ currentPost.title, 'Coming soon…' ]);
+            
+            ({ document } = parseHTML(BasicPostHtml));
+            options.comingSoonText = 'More to come!';
+            await seriesDisplay.displaySeriesInfo(document, options);
+            assertTextForListItems(document, [ currentPost.title, options.comingSoonText ]);
+
         });
     });
 });
