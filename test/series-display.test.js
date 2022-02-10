@@ -957,11 +957,61 @@ describe('SeriesDisplay', function () {
             options.comingSoonText = 'More to come!';
             await seriesDisplay.displaySeriesInfo(document, options);
             assertTextForListItems(document, [ currentPost.title, options.comingSoonText ]);
+        });
 
+        it('does not insert until DOM content loaded', async function () {
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            let { Event, document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy
+            }
+
+            document.readyState = 'loading';
+            await seriesDisplay.displaySeriesInfo(document, options);
+            assertSeriesElementIsNotPresent(document);
+
+            document.dispatchEvent(new Event('DOMContentLoaded'));
+            await seriesDisplay.displaySeriesInfo(document, options);
+            assertSeriesElementIsPresent(document);
+        });
+
+        it('inserts immediately if document is not loading', async function () {
+            const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            let { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: SeriesTagSlugFluffy
+            }
+
+            document.readyState = 'interactive';
+            await seriesDisplay.displaySeriesInfo(document, options);
+            assertSeriesElementIsPresent(document);
+
+            ({ document } = parseHTML(BasicPostHtml));
+            document.readyState = 'complete';
+            await seriesDisplay.displaySeriesInfo(document, options);
+            assertSeriesElementIsPresent(document);
         });
     });
 });
 
+
+function assertSeriesElementIsPresent(document) {
+    const seriesElement = document.querySelector(`.${SeriesInfoClass}`);
+    should.not.equal(seriesElement, null);
+}
+
+function assertSeriesElementIsNotPresent(document) {
+    const seriesElement = document.querySelector(`.${SeriesInfoClass}`);
+    should.equal(seriesElement, null);
+}
 
 function assertAsideInSection(node, expectedCount) {
     const asides = node.querySelectorAll(`.${SeriesInfoClass} aside`);
