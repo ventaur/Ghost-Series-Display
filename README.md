@@ -64,7 +64,7 @@ or it is included in your theme, you do not need to include the first line.*
             });
     })(
         window.document, 
-        '/assets/js/ghost-series-display.min.js',              // location to the series display script
+        '/assets/built/ghost-series-display.min.js',           // location to the series display script
         '0123456789abcdef0123456789',                          // your Ghost Content API key
         `${window.location.protocol}//${window.location.host}` // URL to your Ghost Admin site
     );
