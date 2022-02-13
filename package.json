@@ -11,20 +11,17 @@
   "license": "ISC",
   "main": "dist/cjs/ghost-series-display.js",
   "umd": "dist/umd/ghost-series-display.min.js",
-  "unpkg": "dist/umd/ghost-series-display.js",
+  "unpkg": "dist/umd/ghost-series-display.min.js",
   "module": "dist/es/ghost-series-display.js",
   "source": "lib/index.js",
   "type": "module",
   "files": [
     "LICENSE",
     "README.md",
-    "cjs/",
-    "lib/",
-    "umd/",
-    "es/"
+    "dist/**",
+    "lib/**"
   ],
   "scripts": {
-    "dev": "echo \"Implement me!\"",
     "test": "mocha './test/**/*.test.js'",
     "posttest": "npm run lint",
     "build": "rollup -c",

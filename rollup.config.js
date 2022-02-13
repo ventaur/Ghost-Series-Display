@@ -71,22 +71,13 @@ const config = [
     // bundles all dependencies and polyfills.
     {
         input: pkg.source,
-        output: [
-            {
-                file: pkg.unpkg,
-                format: 'umd',
-                name: 'GhostSeriesDisplay',
-                sourcemap: true,
-                plugins: []
-            },
-            {
-                file: pkg.umd,
-                format: 'umd',
-                name: 'GhostSeriesDisplay',
-                sourcemap: true,
-                plugins: [terser()]
-            }
-        ],
+        output: {
+            file: pkg.umd,
+            format: 'umd',
+            name: 'GhostSeriesDisplay',
+            sourcemap: true,
+            plugins: [terser()]
+        },
         plugins: [
             resolve({
                 browser: true
