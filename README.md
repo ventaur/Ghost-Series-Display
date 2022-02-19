@@ -186,3 +186,21 @@ Another example uses custom options for the display of our series info.
     });
 </script>
 ```
+
+
+## Development
+Not too much to say here. We are using `np` for easier publishing to NPM. 
+Be sure to prepare the build first.
+
+```
+npm run prepare
+```
+
+After the build is complete, run `np` with an appropriate version.
+
+```
+np patch
+np minor
+np major
+np 1.0.0
+```
