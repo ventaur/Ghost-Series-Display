@@ -22,11 +22,59 @@ Next, you will need to add some code via your Admin site.
 
 ### Advanced Method: Theme Edits
 If you are comfortable editing your site's theme, you can integrate directly. 
-Doing so will only affect that specific theme.
+However, doing so will only affect that specific theme, whereas the Code Injection method works for 
+any theme (barring some possible needed tweaks to the embed script for insertions).
 
-1. Copy the `ghost-series-display.min.js` script to your theme's `assets` directory for JS (e.g., `assets/js/`).
-2. Open your theme's `default.hbs` template (or equivalent used by all child templates).
-3. Add the JS code (example below) near the closing body tag: `</body>`. Typically, this is just before or after a script or ghost foot partial (e.g., `{{ghost_foot}}`).
+1. Install the `ghost-series-display` package via NPM to your theme project: 
+```
+npm i ghost-series-display --save-dev
+```
+2. Update your theme's build script to include one of the scripts from the `ghost-series-display` package.
+Below is an example for adding its UMD script to the `Casper` theme.
+```js
+function js(done) {
+    pump([
+        src([
+            'assets/js/lib/*.js',
+            'assets/js/*.js'
+        ], {sourcemaps: true}),
+        uglify(),
+        concat('casper.js'),
+        dest('assets/built/', {sourcemaps: '.'}),
+        
+        src('node_modules/ghost-series-display/dist/umd/ghost-series-display.min.js'),
+        dest('assets/built/', {sourcemaps: '.'}),
+        
+        livereload()
+    ], handleError(done));
+}
+```
+3. Open your theme's main template (usually `default.hbs`).
+4. Add a block for page scripts just before the `ghost_foot` helper.
+```html
+    {{{block "pageScripts"}}}
+
+    {{ghost_foot}}
+</body>
+```
+5. Open your theme's post template (e.g., `post.hbs`).
+6. Add the integration script code inside a content block matching the name used in your main template.
+```html
+{{#contentFor "pageScripts"}}
+<script src="https://unpkg.com/@tryghost/content-api@1.6.0/umd/content-api.min.js"></script>
+<script>
+    // Series Display
+    (function(opts) {
+        ...
+    })({
+        document: window.document, 
+        src:      '{{asset "built/ghost-series-display.min.js"}}', 
+        apiKey:   '0123456789abcdef0123456789', 
+        apiUrl:   `${window.location.protocol}//${window.location.host}`
+    });
+</script>
+{{/contentFor}}
+```
 
 ### Integration Script Examples
 These examples require you to verify (or change) the location of the Series Display script file 
