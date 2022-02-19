@@ -63,7 +63,7 @@ describe('SeriesDisplay', function () {
             });
 
             it('contains a title in the heading', function () {
-                assertTitleInHeading(fragment, [ TagsBySlug[SeriesTagSlugFluffy].name ]);
+                assertTitleInHeading(fragment, [ `Other Posts in ${TagsBySlug[SeriesTagSlugFluffy].name}` ]);
             });
 
             it('contains an ordered list in an aside', function () {
@@ -140,7 +140,10 @@ describe('SeriesDisplay', function () {
             });
 
             it('contains a title in each heading', function () {
-                assertTitleInHeading(fragment, [ TagsBySlug[SeriesTagSlugDecDaily].name, TagsBySlug[SeriesTagSlugFluffy].name ]);
+                assertTitleInHeading(fragment, [
+                    `Other Posts in ${TagsBySlug[SeriesTagSlugDecDaily].name}`, 
+                    `Other Posts in ${TagsBySlug[SeriesTagSlugFluffy].name}`
+                ]);
             });
 
             it('contains 2 ordered lists in an aside', function () {
@@ -352,6 +355,25 @@ describe('SeriesDisplay', function () {
             assertTextForListItems(fragment, [ currentPost.title, options.comingSoonText ]);
 
         });
+
+        it('contains custom heading text template', async function () {
+            const api = { posts: { browse: sinon.fake.returns(decDailyAndFluffyPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML('');
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ],
+                headingTextTemplate: 'Other {{seriesTagName}} Posts'
+            }
+
+            const fragment = await seriesDisplay.buildSeriesInfoFragment(document, options);
+            assertTitleInHeading(fragment, [
+                `Other ${TagsBySlug[SeriesTagSlugDecDaily].name} Posts`,
+                `Other ${TagsBySlug[SeriesTagSlugFluffy].name} Posts`
+            ]);
+        });
     });
 
     describe('#displaySeriesInfo', function () {
@@ -381,7 +403,7 @@ describe('SeriesDisplay', function () {
             });
 
             it('inserts a title in the heading', function () {
-                assertTitleInHeading(document, [ TagsBySlug[SeriesTagSlugFluffy].name ]);
+                assertTitleInHeading(document, [ `Other Posts in ${TagsBySlug[SeriesTagSlugFluffy].name}` ]);
             });
 
             it('inserts an ordered list in an aside', function () {
@@ -457,7 +479,10 @@ describe('SeriesDisplay', function () {
             });
 
             it('inserts a title in each heading', function () {
-                assertTitleInHeading(document, [ TagsBySlug[SeriesTagSlugDecDaily].name, TagsBySlug[SeriesTagSlugFluffy].name ]);
+                assertTitleInHeading(document, [
+                    `Other Posts in ${TagsBySlug[SeriesTagSlugDecDaily].name}`, 
+                    `Other Posts in ${TagsBySlug[SeriesTagSlugFluffy].name}`
+                ]);
             });
 
             it('inserts 2 ordered lists in an aside', function () {
@@ -959,6 +984,25 @@ describe('SeriesDisplay', function () {
             assertTextForListItems(document, [ currentPost.title, options.comingSoonText ]);
         });
 
+        it('inserts custom heading text template', async function () {
+            const api = { posts: { browse: sinon.fake.returns(decDailyAndFluffyPosts) }};
+            const seriesDisplay = new SeriesDisplay(api);
+
+            /** @type {Document} */
+            const { document } = parseHTML(BasicPostHtml);
+            /** @type import('../lib/index.js').BuildSeriesInfoOptions */
+            const options = {
+                seriesTagSlugs: [ SeriesTagSlugDecDaily, SeriesTagSlugFluffy ],
+                headingTextTemplate: 'More {{seriesTagName}} Posts'
+            }
+
+            await seriesDisplay.displaySeriesInfo(document, options);
+            assertTitleInHeading(document, [
+                `More ${TagsBySlug[SeriesTagSlugDecDaily].name} Posts`,
+                `More ${TagsBySlug[SeriesTagSlugFluffy].name} Posts`
+            ]);
+        });
+
         it('does not insert until DOM content loaded', async function () {
             const api = { posts: { browse: sinon.fake.returns(fluffyPosts) }};
             const seriesDisplay = new SeriesDisplay(api);
@@ -1023,10 +1067,10 @@ function assertHeadingInAside(node, expectedCount) {
     headings.should.have.lengthOf(expectedCount);
 }
 
-function assertTitleInHeading(node, tagNames) {
+function assertTitleInHeading(node, titles) {
     const headings = node.querySelectorAll(`.${SeriesInfoClass} h2`);
-    for (const [i, tag ] of tagNames.entries()) {
-        headings[i].textContent.should.contain(`Other Posts in ${tag}`);
+    for (const [i, title ] of titles.entries()) {
+        headings[i].textContent.should.equal(title);
     }
 }
 
